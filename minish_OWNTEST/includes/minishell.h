@@ -6,7 +6,7 @@
 /*   By: ebarguil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:09:45 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/02/23 17:08:14 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/02/24 17:54:19 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,23 +45,34 @@
 
 typedef struct s_elm
 {
-	char			*s;
+	char			*str;
+	char			t;
 	struct s_elm	*next;
 	struct s_elm	*prev;
 }	t_elm;
 
-typedef struct s_lst
+typedef struct s_dat
+{
+	int		i;
+	int		*ind;
+	char	c;
+	char	*arg;
+	int		x;
+}	t_dat;
+
+typedef struct s_adm
 {
 	struct s_elm	*head;
 	struct s_elm	*tail;
-}	t_lst;
+	struct s_dat	*dat;
+}	t_adm;
 
-typedef struct s_quo
-{
-	int		i;
-	int		oc;
-	int		*ind;
-	char	c;
-}	t_quo;
+/* ///// srcs/quote.c ///// */
+
+int	ft_chk_quote(t_adm *adm);
+
+/* ///// srcs/list.c ///// */
+
+int	ft_init_list(char *arg, t_adm *adm);
 
 #endif

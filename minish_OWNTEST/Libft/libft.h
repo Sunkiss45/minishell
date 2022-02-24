@@ -6,7 +6,7 @@
 /*   By: ebarguil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 12:50:54 by ebarguil          #+#    #+#             */
-/*   Updated: 2021/12/20 10:37:32 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/02/24 18:03:13 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,12 @@ char	*ft_strjoin(int size, char **strs, char *sep);
 char	*ft_strjoin_lib(char *s1, char *s2);
 
 /*
- * === ft_strlen === *
+ * === ft_str === *
  */
 
 int		ft_strlen(char *s);
+int		ft_strcmp(char *s1, char *s2);
+char	*ft_strdup(char *src);
 
 /*
  * === get_next_line === *
@@ -73,5 +75,11 @@ typedef struct s_gnl
 }	t_gnl;
 
 char	*gnl(int fd);
+
+/*
+ * === ft_bzero === *
+ */
+
+void	ft_bzero(char *str, int x);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: ebarguil <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/22 15:23:29 by ebarguil          #+#    #+#              #
-#    Updated: 2022/02/22 15:48:49 by ebarguil         ###   ########.fr        #
+#    Updated: 2022/02/24 16:01:13 by ebarguil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,9 @@ LIB			=	-L./Libft -lft -L./local/lib -lreadline
 
 vpath %.c srcs #va chercher les fichiers .c dans ts les dossiers repertories
 
-SRC			=	srcs/main.c
+SRC			=	srcs/main.c \
+				srcs/quote.c \
+				srcs/list.c \
 
 OBJ			=	$(SRC:srcs/%.c=objects/%.o)
 
@@ -55,7 +57,7 @@ fclean		:	clean
 				$(RM) $(NAME)
 				$(MAKE) -C Libft fclean
 
-fsa			:	libft obj $(OBJ)
+fsa			:	fclean libft obj $(OBJ)
 				$(CC) $(CFLAGS) $(CFA) -o $(NAME) $(SRC) $(LIB)
 
 re			:	fclean all

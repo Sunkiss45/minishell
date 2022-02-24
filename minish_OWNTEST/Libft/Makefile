@@ -6,7 +6,7 @@
 #    By: ebarguil <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/29 16:06:27 by ebarguil          #+#    #+#              #
-#    Updated: 2021/12/20 10:40:56 by ebarguil         ###   ########.fr        #
+#    Updated: 2022/02/24 18:03:31 by ebarguil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,9 @@ SRC		=	ft_putchar_fd.c \
 			ft_strjoin.c \
 			ft_strjoin_lib.c \
 			ft_strlen.c \
+			ft_strcmp.c \
+			ft_strdup.c \
+			ft_bzero.c \
 			gnl.c \
 
 OBJ		=	$(SRC:.c=.o)
