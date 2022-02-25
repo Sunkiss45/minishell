@@ -6,7 +6,7 @@
 /*   By: ebarguil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 14:42:57 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/02/24 16:50:50 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/02/25 21:03:08 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,30 @@ void	ft_parse_quote(char x, t_dat *data)
 {
 	if (data->c != 0)
 	{
-		data->ind[data->i] = 1;
+		if (data->ind[data->i - 1] == 1)
+			data->ind[data->i] = 1;
+		else
+			data->ind[data->i] = 2;
 		if (data->c == x)
 			data->c = 0;
 	}
-	else if (data->c == 0 && (x == '\'' || x == '\"'))
+	else if (data->c == 0 && (x == '\'' || x == '\"'
+		|| x == '<' || x == '>' || x == '|'))
 	{
-		data->ind[data->i] = 1;
-		data->c = x;
+		if (x == '<')
+			data->ind[data->i] = 3;
+		else if (x == '>')
+			data->ind[data->i] = 4;
+		else if (x == '|')
+			data->ind[data->i] = 5;
+		else if (x == '\'' || x == '\"')
+		{
+			if (x == '\'')
+				data->ind[data->i] = 1;
+			else
+				data->ind[data->i] = 2;
+			data->c = x;
+		}
 	}
 	else
 		data->ind[data->i] = 0;
@@ -75,5 +91,5 @@ int	ft_chk_quote(t_adm *adm)
 	if (q1 % 2 == 0 && q2 % 2 == 0)
 		return (ft_cut_quote(arg, adm, adm->dat));
 	printf(CYAN"please verify your quotes !"RESET"\n");
-	return (1);
+	return (0);
 }

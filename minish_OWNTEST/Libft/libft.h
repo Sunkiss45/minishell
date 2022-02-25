@@ -6,7 +6,7 @@
 /*   By: ebarguil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 12:50:54 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/02/24 18:03:13 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/02/25 22:01:15 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ void	ft_putnbr_fd(int n, int fd);
  */
 
 char	**ft_split(char *str, char *charset);
+char	**ft_split_lib(char *str, char c);
 char	**ft_split_add(char *str, char *charset);
+void	*ft_free_split(char **strs);
 
 /*
  * === ft_strjoin === *
@@ -51,6 +53,7 @@ char	**ft_split_add(char *str, char *charset);
 
 char	*ft_strjoin(int size, char **strs, char *sep);
 char	*ft_strjoin_lib(char *s1, char *s2);
+char	*ft_strjoin_n(int size, char **strs);
 
 /*
  * === ft_str === *

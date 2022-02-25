@@ -6,13 +6,13 @@
 /*   By: ebarguil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/26 15:13:51 by ebarguil          #+#    #+#             */
-/*   Updated: 2021/12/17 17:56:04 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/02/25 15:22:52 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	*ft_free(char **strs)
+void	*ft_free_split(char **strs)
 {
 	int	i;
 
@@ -23,7 +23,7 @@ static void	*ft_free(char **strs)
 			free(strs[i]);
 		free(strs);
 	}
-	return (0);
+	return (NULL);
 }
 
 static int	ft_is_from_charset(char c, char *charset)
@@ -69,7 +69,7 @@ static char	*ft_strcut(char *str, char *charset)
 		i++;
 	new_str = malloc(sizeof(new_str) * (i + 1));
 	if (new_str == NULL)
-		return (0);
+		return (NULL);
 	i = 0;
 	while (str[i] && !ft_is_from_charset(str[i], charset))
 	{
@@ -98,8 +98,8 @@ char	**ft_split(char *str, char *charset)
 		if (i[1] < i[2])
 		{
 			strs[i[1]] = ft_strcut(&str[i[0]], charset);
-			if (strs == NULL)
-				return (ft_free(strs));
+			if (strs[i[1]] == NULL)
+				return (ft_free_split(strs));
 			i[1]++;
 		}
 		while (str[i[0]] && !ft_is_from_charset(str[i[0]], charset))

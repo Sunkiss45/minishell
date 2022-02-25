@@ -6,7 +6,7 @@
 /*   By: ebarguil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:27:46 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/02/24 18:26:41 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/02/25 21:13:29 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	ft_pointer_elm(t_elm *elm, t_adm *adm)
 int	ft_create_elm(char *str, t_adm *adm)
 {
 	t_elm	*elm;
+	char	t;
 
 	if (str == NULL)
 		return (1);
@@ -44,39 +45,47 @@ int	ft_create_elm(char *str, t_adm *adm)
 	}
 	ft_pointer_elm(elm, adm);
 	adm->tail->str = str;
-	if (str[0] == '\'' || str[0] == '\"')
-		adm->tail->t = str[0];
+	t = str[0];
+	if (t == '\'' || t == '\"' || t == '<' || t == '>' || t == '|')
+		adm->tail->t = t;
 	else
 		adm->tail->t = '\0';
 	return (0);
 }
 
-int	ft_parse_list(char *arg, t_adm *adm)
+int	ft_parse_list(char *arg, t_adm *adm, t_dat *dat)
 {
 	int		k;
 	int		b;
 	char	buf[1024];
 
-	k = adm->dat->ind[0];
-	b = -1;
+	k = dat->ind[0];
+	b = 0;
 	ft_bzero(buf, 1024);
-	adm->dat->i = -1;
-	while (arg[++adm->dat->i])
+	dat->i = 0;
+	while (arg[dat->i])
 	{
-		if (adm->dat->ind[adm->dat->i] == k)
-			buf[++b] = arg[adm->dat->i];
-		else
+		while (arg[dat->i] && dat->ind[dat->i] == k)
 		{
-			k = adm->dat->ind[adm->dat->i];
+			if (arg[dat->i] == ' ' && k == 0)
+				break;
+			buf[b++] = arg[dat->i++];
+		}
+		if (buf[0] != '\0')
+		{
 			if (ft_create_elm(ft_strdup(buf), adm))
 				return (1);
-			b = -1;
+			b = 0;
 			ft_bzero(buf, 1024);
-			buf[++b] = arg[adm->dat->i];
 		}
+		if (arg[dat->i] == ' ')
+			dat->i++;
+		if (arg[dat->i])
+			k = dat->ind[dat->i];
 	}
-	if (ft_create_elm(ft_strdup(buf), adm))
-		return (1);
+	if (buf[0] != '\0')
+		if (ft_create_elm(ft_strdup(buf), adm))
+			return (1);
 	return (0);
 }
 
@@ -86,7 +95,13 @@ int	ft_init_list(char *arg, t_adm *adm)
 
 	adm->head = NULL;
 	adm->tail = NULL;
-	ft_parse_list(arg, adm);
+	if (ft_parse_list(arg, adm, adm->dat))
+		printf(RED"crash malloc init list"RESET"\n");
+	now = adm->head;
+//	while (1)
+//	{
+//		
+//	}
 
 	now = adm->head;
 	while (now != NULL)

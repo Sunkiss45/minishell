@@ -6,7 +6,7 @@
 #    By: ebarguil <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/29 16:06:27 by ebarguil          #+#    #+#              #
-#    Updated: 2022/02/24 18:03:31 by ebarguil         ###   ########.fr        #
+#    Updated: 2022/02/25 22:03:29 by ebarguil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,11 @@ NAME	=	libft.a
 SRC		=	ft_putchar_fd.c \
 			ft_putnbr_fd.c \
 			ft_split.c \
+			ft_split_lib.c \
 			ft_split_add.c \
 			ft_strjoin.c \
 			ft_strjoin_lib.c \
+			ft_strjoin_n.c \
 			ft_strlen.c \
 			ft_strcmp.c \
 			ft_strdup.c \

@@ -6,7 +6,7 @@
 /*   By: ebarguil <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:09:45 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/02/24 17:54:19 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/02/25 21:40:27 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ typedef struct s_elm
 
 typedef struct s_dat
 {
-	int		i;
 	int		*ind;
+	int		i;
 	char	c;
 	char	*arg;
 	int		x;
@@ -62,6 +62,7 @@ typedef struct s_dat
 
 typedef struct s_adm
 {
+	char			**ev;
 	struct s_elm	*head;
 	struct s_elm	*tail;
 	struct s_dat	*dat;
