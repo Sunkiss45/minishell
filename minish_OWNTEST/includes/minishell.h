@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebarguil <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:09:45 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/02/25 21:40:27 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/01 17:52:37 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,9 @@ typedef struct s_dat
 {
 	int		*ind;
 	int		i;
+	int		k;
+	int		b;
+	char	buf[1024];
 	char	c;
 	char	*arg;
 	int		x;
@@ -70,10 +73,17 @@ typedef struct s_adm
 
 /* ///// srcs/quote.c ///// */
 
-int	ft_chk_quote(t_adm *adm);
+int		ft_chk_quote(t_adm *adm);
 
 /* ///// srcs/list.c ///// */
 
-int	ft_init_list(char *arg, t_adm *adm);
+int		ft_init_list(char *arg, t_adm *adm);
+
+/*
+ * srcsft_free.c
+*/
+
+void	ft_free_list(t_adm *adm);
+int		ft_free(t_adm *adm, char *str, int x);
 
 #endif

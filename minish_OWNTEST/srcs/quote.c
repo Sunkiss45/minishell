@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebarguil <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 14:42:57 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/02/25 21:03:08 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/01 16:35:01 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,16 @@ void	ft_parse_quote(char x, t_dat *data)
 {
 	if (data->c != 0)
 	{
-		if (data->ind[data->i - 1] == 1)
-			data->ind[data->i] = 1;
-		else
-			data->ind[data->i] = 2;
+		data->ind[data->i] = data->c;
 		if (data->c == x)
 			data->c = 0;
 	}
 	else if (data->c == 0 && (x == '\'' || x == '\"'
-		|| x == '<' || x == '>' || x == '|'))
+			|| x == '<' || x == '>' || x == '|'))
 	{
-		if (x == '<')
-			data->ind[data->i] = 3;
-		else if (x == '>')
-			data->ind[data->i] = 4;
-		else if (x == '|')
-			data->ind[data->i] = 5;
-		else if (x == '\'' || x == '\"')
-		{
-			if (x == '\'')
-				data->ind[data->i] = 1;
-			else
-				data->ind[data->i] = 2;
+		data->ind[data->i] = x;
+		if (x == '\'' || x == '\"')
 			data->c = x;
-		}
 	}
 	else
 		data->ind[data->i] = 0;
@@ -54,18 +40,18 @@ int	ft_cut_quote(char *arg, t_adm *adm, t_dat *dat)
 	dat->i = -1;
 	while (arg[++dat->i])
 		ft_parse_quote(arg[dat->i], dat);
-//
+	ft_init_list(arg, adm);
+	free(dat->ind);
+	return (0);
+}
+
+/*
 	dat->i = -1;
 	printf(GREEN"ind = [");
 	while (arg[++dat->i])
 		printf("%d", dat->ind[dat->i]);
 	printf("]"RESET"\n");
-//
-	ft_init_list(arg, adm); // fct decouper la ligne par 0 et 1 en malloc
-// fct decouper chaque ligne par ' ' (hors 1)
-	free(dat->ind);
-	return (0);
-}
+*/
 
 int	ft_chk_quote(t_adm *adm)
 {
@@ -78,6 +64,8 @@ int	ft_chk_quote(t_adm *adm)
 	q1 = 0;
 	q2 = 0;
 	arg = adm->dat->arg;
+	adm->head = NULL;
+	adm->tail = NULL;
 	if (!arg || !arg[0])
 		return (0);
 	while (arg[++i])
@@ -87,7 +75,6 @@ int	ft_chk_quote(t_adm *adm)
 		if (arg[i] == '\"' && q1 % 2 == 0)
 			q2++;
 	}
-//	printf(GREEN"q1 \' = [%d] | q2 \" = [%d]"RESET"\n", q1, q2);
 	if (q1 % 2 == 0 && q2 % 2 == 0)
 		return (ft_cut_quote(arg, adm, adm->dat));
 	printf(CYAN"please verify your quotes !"RESET"\n");

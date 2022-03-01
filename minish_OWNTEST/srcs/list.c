@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebarguil <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:27:46 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/02/25 21:13:29 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/01 17:31:24 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,71 +53,49 @@ int	ft_create_elm(char *str, t_adm *adm)
 	return (0);
 }
 
+int	ft_loop_list(t_adm *adm, t_dat *dat)
+{
+	while (dat->arg[dat->i] && dat->ind[dat->i] == dat->k)
+	{
+		if (dat->arg[dat->i] == ' ' && dat->k == 0)
+			break ;
+		dat->buf[dat->b++] = dat->arg[dat->i++];
+	}
+	if (dat->buf[0] != '\0')
+	{
+		if (ft_create_elm(ft_strdup(dat->buf), adm))
+			return (1);
+		dat->b = 0;
+		ft_bzero(dat->buf, 1024);
+	}
+	if (dat->arg[dat->i] == ' ')
+		dat->i++;
+	if (dat->arg[dat->i])
+		dat->k = dat->ind[dat->i];
+	return (0);
+}
+
 int	ft_parse_list(char *arg, t_adm *adm, t_dat *dat)
 {
-	int		k;
-	int		b;
-	char	buf[1024];
-
-	k = dat->ind[0];
-	b = 0;
-	ft_bzero(buf, 1024);
+	dat->k = dat->ind[0];
+	dat->b = 0;
+	ft_bzero(dat->buf, 1024);
 	dat->i = 0;
 	while (arg[dat->i])
 	{
-		while (arg[dat->i] && dat->ind[dat->i] == k)
-		{
-			if (arg[dat->i] == ' ' && k == 0)
-				break;
-			buf[b++] = arg[dat->i++];
-		}
-		if (buf[0] != '\0')
-		{
-			if (ft_create_elm(ft_strdup(buf), adm))
-				return (1);
-			b = 0;
-			ft_bzero(buf, 1024);
-		}
-		if (arg[dat->i] == ' ')
-			dat->i++;
-		if (arg[dat->i])
-			k = dat->ind[dat->i];
+		ft_loop_list(adm, adm->dat);
 	}
-	if (buf[0] != '\0')
-		if (ft_create_elm(ft_strdup(buf), adm))
+	if (dat->buf[0] != '\0')
+		if (ft_create_elm(ft_strdup(dat->buf), adm))
 			return (1);
 	return (0);
 }
 
 int	ft_init_list(char *arg, t_adm *adm)
 {
-	t_elm	*now;
-
 	adm->head = NULL;
 	adm->tail = NULL;
 	if (ft_parse_list(arg, adm, adm->dat))
 		printf(RED"crash malloc init list"RESET"\n");
-	now = adm->head;
-//	while (1)
-//	{
-//		
-//	}
-
-	now = adm->head;
-	while (now != NULL)
-	{
-		printf(YELLOW"str = [%s] || t = [%c]"RESET"\n", now->str, now->t);
-		now = now->next;
-		if (now == NULL)
-		{
-			free(adm->tail->str);
-			free(adm->tail);
-		}
-		else
-		{
-			free(now->prev->str);
-			free(now->prev);
-		}
-	}
 	return (0);
 }
