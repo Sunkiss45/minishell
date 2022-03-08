@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:40:43 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/01 17:52:24 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/04 13:49:20 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,16 @@ void	ft_free_list(t_adm *adm)
 			free(now->prev);
 		}
 	}
+	adm->head = NULL;
+	adm->tail = NULL;
 }
 
 int	ft_free(t_adm *adm, char *str, int x)
 {
 	if (adm->dat)
 		free(adm->dat);
+	if (adm->buil)
+		ft_free_split(adm->buil);
 	if (adm->ev)
 		ft_free_split(adm->ev);
 	if (adm->head)

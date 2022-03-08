@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:27:46 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/01 17:31:24 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/04 13:33:05 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,18 @@ void	ft_pointer_elm(t_elm *elm, t_adm *adm)
 	}
 }
 
+int	ft_cut_quote(t_adm *adm)
+{
+	char	*tmp;
+
+	tmp = adm->tail->str;
+	adm->tail->str = ft_strdup_cut(adm->tail->str, adm->tail->t);
+	free(tmp);
+	if (adm->tail->str == NULL)
+		return (1);
+	return (0);
+}
+
 int	ft_create_elm(char *str, t_adm *adm)
 {
 	t_elm	*elm;
@@ -50,10 +62,12 @@ int	ft_create_elm(char *str, t_adm *adm)
 		adm->tail->t = t;
 	else
 		adm->tail->t = '\0';
+	if ((t == '\'' || t == '\"') && ft_cut_quote(adm))
+		return (1);
 	return (0);
 }
 
-int	ft_loop_list(t_adm *adm, t_dat *dat)
+int	ft_parse_list(t_adm *adm, t_dat *dat)
 {
 	while (dat->arg[dat->i] && dat->ind[dat->i] == dat->k)
 	{
@@ -75,27 +89,18 @@ int	ft_loop_list(t_adm *adm, t_dat *dat)
 	return (0);
 }
 
-int	ft_parse_list(char *arg, t_adm *adm, t_dat *dat)
+int	ft_init_list(char *arg, t_adm *adm, t_dat *dat)
 {
 	dat->k = dat->ind[0];
 	dat->b = 0;
 	ft_bzero(dat->buf, 1024);
 	dat->i = 0;
 	while (arg[dat->i])
-	{
-		ft_loop_list(adm, adm->dat);
-	}
+		if (ft_parse_list(adm, adm->dat))
+			return (1);
 	if (dat->buf[0] != '\0')
 		if (ft_create_elm(ft_strdup(dat->buf), adm))
 			return (1);
-	return (0);
-}
-
-int	ft_init_list(char *arg, t_adm *adm)
-{
-	adm->head = NULL;
-	adm->tail = NULL;
-	if (ft_parse_list(arg, adm, adm->dat))
-		printf(RED"crash malloc init list"RESET"\n");
+	ft_define_type(adm);
 	return (0);
 }

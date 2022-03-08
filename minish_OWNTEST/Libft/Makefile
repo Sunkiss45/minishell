@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ebarguil <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/29 16:06:27 by ebarguil          #+#    #+#              #
-#    Updated: 2022/02/25 22:03:29 by ebarguil         ###   ########.fr        #
+#    Updated: 2022/03/03 15:03:55 by ebarguil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME	=	libft.a
 
 SRC		=	ft_putchar_fd.c \
 			ft_putnbr_fd.c \
+			ft_putstr_fd.c \
 			ft_split.c \
 			ft_split_lib.c \
 			ft_split_add.c \
@@ -23,6 +24,7 @@ SRC		=	ft_putchar_fd.c \
 			ft_strlen.c \
 			ft_strcmp.c \
 			ft_strdup.c \
+			ft_strdup_cut.c \
 			ft_bzero.c \
 			gnl.c \
 

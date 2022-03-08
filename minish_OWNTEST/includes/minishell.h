@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:09:45 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/01 17:52:37 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/07 13:10:00 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,12 @@
 # define GREY "\033[1;37m"
 # define RESET "\033[0m"
 
+# define BUILTINS "echo cd pwd export unset env exit cat"
+
 typedef struct s_elm
 {
 	char			*str;
+	char			*exe;
 	char			t;
 	struct s_elm	*next;
 	struct s_elm	*prev;
@@ -53,12 +56,12 @@ typedef struct s_elm
 
 typedef struct s_dat
 {
+	char	buf[1024];
+	char	c;
 	int		*ind;
 	int		i;
 	int		k;
 	int		b;
-	char	buf[1024];
-	char	c;
 	char	*arg;
 	int		x;
 }	t_dat;
@@ -66,22 +69,48 @@ typedef struct s_dat
 typedef struct s_adm
 {
 	char			**ev;
+	char			**buil;
+	char			**pth;
 	struct s_elm	*head;
 	struct s_elm	*tail;
 	struct s_dat	*dat;
 }	t_adm;
 
-/* ///// srcs/quote.c ///// */
+/*
+ *	srcs/quote.c 
+ */
 
-int		ft_chk_quote(t_adm *adm);
-
-/* ///// srcs/list.c ///// */
-
-int		ft_init_list(char *arg, t_adm *adm);
+int		ft_parse(t_adm *adm);
 
 /*
- * srcsft_free.c
-*/
+ *	srcs/list.c 
+ */
+
+int		ft_init_list(char *arg, t_adm *adm, t_dat *dat);
+
+/*
+ *	srcs/prog.c
+ */
+
+int		ft_execute_prog(char *arg, t_adm *adm);
+
+/*
+ *	srcs/define.c
+ */
+
+int		ft_define_type(t_adm *adm);
+
+/*
+ *	srcs/utils.c
+ */
+
+void	handle_sigint(int sig);
+int		ft_get_path(t_adm *adm);
+int		ft_perror(char *s, int x);
+
+/*
+ *	srcs/free.c
+ */
 
 void	ft_free_list(t_adm *adm);
 int		ft_free(t_adm *adm, char *str, int x);
