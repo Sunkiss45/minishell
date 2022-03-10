@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:09:45 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/07 13:10:00 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/09 16:21:28 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 # define GREY "\033[1;37m"
 # define RESET "\033[0m"
 
-# define BUILTINS "echo cd pwd export unset env exit cat"
+# define BUILTINS "echo cd pwd export unset env exit"
 
 typedef struct s_elm
 {

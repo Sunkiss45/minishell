@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 13:30:10 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/07 11:43:29 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/10 16:01:03 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,24 @@
 
 int	is_command(t_adm *adm, t_elm *elm)
 {
+	int	fd;
+	int	i;
 
+	i = -1;
+	while (adm->pth[++i])
+	{
+		elm->exe = ft_strjoin_lib(adm->pth[i], elm->str);
+		if (elm->exe == NULL)
+			return (ft_perror("is_command", -1));
+		printf(RED"[%s]"RESET"\n", elm->exe);
+		fd = open(elm->exe, O_DIRECTORY);
+		if (!access(elm->exe, F_OK) && !access(elm->exe, X_OK) && fd == -1)
+			return (1);
+		if (fd > 0)
+			close(fd);
+		free(elm->exe);
+		elm->exe = NULL;
+	}
 	return (0);
 }
 
@@ -23,6 +40,7 @@ int	is_builtins(t_elm *elm, char **buil)
 	int	i;
 
 	i = -1;
+	elm->exe = NULL;
 	while (buil[++i])
 		if (!ft_strcmp(elm->str, buil[i]))
 			return (1);
@@ -31,34 +49,45 @@ int	is_builtins(t_elm *elm, char **buil)
 
 void	is_file(t_elm *elm)
 {
+	int	fd;
+
 	if (access(elm->str, F_OK))
 		return ;
-	if (open(elm->str, O_DIRECTORY) == -1)
+	fd = open(elm->str, O_DIRECTORY);
+	if (fd == -1)
 		elm->t = 'f';
 	else
 		elm->t = 'd';
+	if (fd > 0)
+		close(fd);
 	return ;
 }
 
 int	ft_define_type(t_adm *adm)
 {
 	t_elm	*elm;
+	int		x;
 
-	if (ft_get_path(adm))
-		return (ft_perror("ft_get_path", 1));
 	elm = adm->head;
 	while (elm != NULL)
 	{
+		x = 0;
 		if (is_builtins(elm, adm->buil))
 			elm->t = 'b';
-		else if (is_command(adm, elm))
-			elm->t = 'c';
-		// else if (is_option())
-		// 	elm->t = 'o';
+		if (adm->pth && elm->t != 'b')
+		{
+			x = is_command(adm, elm);
+			if (x == -1)
+				break ;
+			if (x == 1)
+				elm->t = 'c';
+		}
+		if (elm->prev && (elm->prev->t == 'c' || elm->prev->t == 'o'
+			|| elm->prev->t == 'b') && elm->str[0] == '-')
+			elm->t = 'o';
 		if (elm->t != 'b' && elm->t != 'c' && elm->t != 'o')
 			is_file(elm);
 		elm = elm->next;
 	}
-	ft_free_split(adm->pth);
 	return (0);
 }

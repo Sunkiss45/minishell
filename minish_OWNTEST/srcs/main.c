@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:37:03 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/04 15:22:58 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/10 16:09:09 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ int	main(int ac, char **av, char **env)
 	adm.tail = NULL;
 	if (ft_recup_env(env, &adm))
 		return (ft_free(&adm, "ft_recup_env", 1));
+	if (ft_get_path(&adm))
+		return (ft_perror("ft_get_path", 1));
 	adm.dat = malloc(sizeof(*adm.dat));
 	adm.buil = ft_split(BUILTINS, " ");
 	if (adm.dat == NULL || adm.buil == NULL)
