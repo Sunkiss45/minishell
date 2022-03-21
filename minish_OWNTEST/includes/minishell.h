@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:09:45 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/09 16:21:28 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/21 15:18:33 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 # define RESET "\033[0m"
 
 # define BUILTINS "echo cd pwd export unset env exit"
+# define BUF_S 1024
 
 typedef struct s_elm
 {
@@ -56,7 +57,7 @@ typedef struct s_elm
 
 typedef struct s_dat
 {
-	char	buf[1024];
+	char	buf[BUF_S];
 	char	c;
 	int		*ind;
 	int		i;
@@ -74,6 +75,7 @@ typedef struct s_adm
 	struct s_elm	*head;
 	struct s_elm	*tail;
 	struct s_dat	*dat;
+	int				p;
 }	t_adm;
 
 /*
@@ -92,13 +94,19 @@ int		ft_init_list(char *arg, t_adm *adm, t_dat *dat);
  *	srcs/prog.c
  */
 
-int		ft_execute_prog(char *arg, t_adm *adm);
+int		ft_execute_prog(t_adm *adm);
 
 /*
  *	srcs/define.c
  */
 
-int		ft_define_type(t_adm *adm);
+int		ft_define_type(t_adm *adm, t_elm *elm);
+
+/*
+ *	srcs/expand.c
+ */
+
+int		ft_expand(t_adm *adm, t_elm *elm);
 
 /*
  *	srcs/utils.c
@@ -113,6 +121,7 @@ int		ft_perror(char *s, int x);
  */
 
 void	ft_free_list(t_adm *adm);
+int		expand_free(char **new, int x);
 int		ft_free(t_adm *adm, char *str, int x);
 
 #endif

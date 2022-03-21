@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:37:03 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/10 16:09:09 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/21 15:17:55 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ int	ft_recup_env(char **env, t_adm *adm)
 
 void	ft_prompt(t_adm *adm)
 {
+	int	r;
+
 	adm->dat->x = 1;
+	r = 0;
 	while (adm->dat->x)
 	{
 		adm->dat->arg = readline("minishell $> ");
@@ -40,8 +43,11 @@ void	ft_prompt(t_adm *adm)
 		printf(GREEN"arg = [%s]"RESET"\n", adm->dat->arg);
 		if (!adm->dat->arg || ft_strcmp(adm->dat->arg, "exit") == 0)
 			adm->dat->x = 0;
-		if (ft_parse(adm))
+		r = ft_parse(adm);
+		if (r)
 			ft_perror("ft_parse", 0);
+		else
+			ft_execute_prog(adm);
 		ft_free_list(adm);
 		free(adm->dat->arg);
 		errno = 0;

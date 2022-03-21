@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 14:13:14 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/10 15:39:42 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/15 14:15:11 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,14 @@ int	ft_get_path(t_adm *adm)
 			adm->pth = ft_split_add(&ev[i][5], ":");
 	if (errno != 0 && adm->pth == NULL)
 		return (1);
-
+// A SUPR
 	i = -1;
 	while (adm->pth[++i])
-		if (adm->pth[i][0] == '/' && adm->pth[i][1] == 'm' && adm->pth[i][2] == 'n'
-			&& adm->pth[i][3] == 't' && adm->pth[i][4] == '/')
+		if (adm->pth[i][0] == '/' && adm->pth[i][1] == 'm'
+			&& adm->pth[i][2] == 'n' && adm->pth[i][3] == 't'
+			&& adm->pth[i][4] == '/')
 			adm->pth[i][0] = '\0';
+// A SUPR
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 #    By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/29 16:06:27 by ebarguil          #+#    #+#              #
-#    Updated: 2022/03/03 15:03:55 by ebarguil         ###   ########.fr        #
+#    Updated: 2022/03/16 15:25:45 by ebarguil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,9 @@ SRC		=	ft_putchar_fd.c \
 			ft_strjoin_n.c \
 			ft_strlen.c \
 			ft_strcmp.c \
+			ft_strncmp.c \
 			ft_strdup.c \
+			ft_strndup.c \
 			ft_strdup_cut.c \
 			ft_bzero.c \
 			gnl.c \

@@ -6,7 +6,7 @@
 #    By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/22 15:23:29 by ebarguil          #+#    #+#              #
-#    Updated: 2022/03/04 16:04:13 by ebarguil         ###   ########.fr        #
+#    Updated: 2022/03/15 14:15:44 by ebarguil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,11 +24,11 @@ LIB			=	-L./Libft -lft -L./local/lib -lreadline
 vpath %.c srcs #va chercher les fichiers .c dans ts les dossiers repertories
 
 SRC			=	srcs/main.c \
-				srcs/quote.c \
+				srcs/parse.c \
 				srcs/list.c \
 				srcs/define.c \
-				srcs/prog.c \
 				srcs/expand.c \
+				srcs/prog.c \
 				srcs/utils.c \
 				srcs/free.c \
 

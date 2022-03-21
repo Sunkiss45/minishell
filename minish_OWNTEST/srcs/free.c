@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:40:43 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/09 16:41:42 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/17 15:57:57 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,19 @@ void	ft_free_list(t_adm *adm)
 	}
 	adm->head = NULL;
 	adm->tail = NULL;
+}
+
+int	expand_free(char **new, int x)
+{
+	int	i;
+
+	i = 0;
+	while (i < 3 && new[i])
+	{
+		free(new[i]);
+		i++;
+	}
+	return (x);
 }
 
 int	ft_free(t_adm *adm, char *str, int x)

@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 13:30:10 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/10 16:01:03 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/16 13:40:55 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	is_command(t_adm *adm, t_elm *elm)
 		elm->exe = ft_strjoin_lib(adm->pth[i], elm->str);
 		if (elm->exe == NULL)
 			return (ft_perror("is_command", -1));
-		printf(RED"[%s]"RESET"\n", elm->exe);
 		fd = open(elm->exe, O_DIRECTORY);
 		if (!access(elm->exe, F_OK) && !access(elm->exe, X_OK) && fd == -1)
 			return (1);
@@ -63,12 +62,10 @@ void	is_file(t_elm *elm)
 	return ;
 }
 
-int	ft_define_type(t_adm *adm)
+int	ft_define_type(t_adm *adm, t_elm *elm)
 {
-	t_elm	*elm;
 	int		x;
 
-	elm = adm->head;
 	while (elm != NULL)
 	{
 		x = 0;
@@ -83,11 +80,13 @@ int	ft_define_type(t_adm *adm)
 				elm->t = 'c';
 		}
 		if (elm->prev && (elm->prev->t == 'c' || elm->prev->t == 'o'
-			|| elm->prev->t == 'b') && elm->str[0] == '-')
+				|| elm->prev->t == 'b') && elm->str[0] == '-')
 			elm->t = 'o';
 		if (elm->t != 'b' && elm->t != 'c' && elm->t != 'o')
 			is_file(elm);
 		elm = elm->next;
 	}
+	if (x == -1)
+		return (1);
 	return (0);
 }
