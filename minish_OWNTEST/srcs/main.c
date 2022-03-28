@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:37:03 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/21 15:17:55 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/23 17:20:03 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	ft_prompt(t_adm *adm)
 		r = ft_parse(adm);
 		if (r)
 			ft_perror("ft_parse", 0);
-		else
+		else if (adm->dat->arg && adm->dat->arg[0])
 			ft_execute_prog(adm);
 		ft_free_list(adm);
 		free(adm->dat->arg);

@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:27:46 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/15 14:45:53 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/24 15:05:32 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	ft_init_list(char *arg, t_adm *adm, t_dat *dat)
 	dat->b = 0;
 	ft_bzero(dat->buf, BUF_S);
 	dat->i = 0;
-	adm->p = 0;
+	adm->p = 1;
 	while (arg[dat->i])
 		if (ft_parse_list(adm, adm->dat))
 			return (1);

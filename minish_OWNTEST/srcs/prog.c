@@ -6,11 +6,38 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:59:00 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/21 15:45:25 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/25 16:17:21 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// // void	exec_builtin(t_adm *adm)
+// // {
+// // 	t_elm	*now;
+
+// // 	now = adm->head; 
+// // 	while (now != NULL)
+// // 	{
+// // 		if (now->t == 'b')
+// // 		{
+// // 			if (ft_strncmp(now->str, "cd", 2) == 0)
+// // 				ft_cd(adm);
+// // 			if (ft_strncmp(now->str,"echo", 4) == 0)
+// // 				ft_echo(now->next->str);
+// // 			if (ft_strcmp(now->str, "pwd") == 0)
+// // 				ft_pwd(); //OK
+// // 			if (ft_strncmp(now->str, "unset", 5) == 0)
+// // 				ft_unset(now->next->str, adm); //OK
+// // 			if (ft_strcmp(now->str, "env") == 0)
+// // 				ft_env(adm); //OK
+// // 			if (ft_strncmp(now->str, "export", 6) == 0)
+// // 				ft_export(&now->str[7], adm); //OK
+// // 			break ;
+// // 		}
+// // 		now = now->next;
+// // 	}
+// // }
 
 // char	**ft_create_exec(t_adm *adm)
 // {
@@ -28,9 +55,8 @@
 // 			op++;
 // 		now = now->next;
 // 	}
-// //printf(PURPLE"nb de lignes d'exec = [%d]"RESET"\n", op);
 // 	if (op != 0)
-// 		exec = malloc(sizeof(char *) * op);
+// 		exec = malloc(sizeof(char *) * (op + 1));
 // 	now = adm->head;
 // 	while (now != NULL)
 // 	{
@@ -46,98 +72,86 @@
 // 		}
 // 		now = now->next;
 // 	}
+// 	if (op != 0)
+// 		exec[i] = NULL;
 // 	return (exec);
 // }
 
-// int	ft_execute_prog(t_adm *adm)//main(t_pip *pipcell, t_copy *cmdargs, int fdd)
+// int	ft_open_file(t_adm *adm, int i)
 // {
-// 	int		end[2];
-// 	int		pid;
-// //	int		fd_entree;
-// 	char	**exec;
 // 	t_elm   *now;
-// //	int		tty;
-// //	char	*msh;
-
+// 	int		fd;
+	
 // 	now = adm->head;
-// 	adm->rd_in = 0;
-// //	adm->rd_out = 1;
-// //	adm->rd_err = 2;
-// //	fd_entree = -1;
+// 	fd = -1;
 // 	while (now != NULL)
 // 	{
-// 		if (now->t == 'f')
+// 		if (now->t == 'f' && --i == 0)
 // 		{
-// 			adm->fd = open(now->str, O_RDONLY);
-// //			fd_entree = open(now->str, O_RDONLY);
-// printf(PURPLE"now->str = [%s], fd_entree = %d"RESET"\n", now->str, adm->fd);//fd_entree);
-// 			break ;
+// 			fd = open(now->str, O_RDONLY);
+// 			return (fd);
 // 		}
 // 		now = now->next;
 // 	}
-// //printf(RED"fd_entree = %d"RESET"\n", adm->fd);//fd_entree);
-// //	msh = ttyname(fd_entree);
-// //	tty = isatty(fd_entree);
-// //printf(YELLOW"ttyname = [%s] | tty = %d"RESET"\n", msh, tty);
-// 	end[0] = -1;
-// 	end[1] = -1;
-// 	if (pipe(end) == -1)
-// 		return (1);
-// 	if (adm->p == 0)
-// 	{	
+// 	return (fd);
+// }
+
+// int	ft_execute_prog(t_adm *adm)
+// {
+// 	int		i;
+// 	int		pid[BUF_S];
+// 	int		count_fd;
+// 	int		fd_in;
+// 	char	**exec;
+// 	t_elm   *now;
+
+// 	now = adm->head;
+// 	fd_in = -1;
+// 	if (adm->p == 1)
+// 	{
+// 		count_fd = 0;
+// 		while (now != NULL)
+// 		{
+// 			if (now->t == 'f')
+// 				count_fd++;
+// 			now = now->next;
+// 		}
 // 		exec = ft_create_exec(adm);
-// 		pid = fork();
-// 		if (pid < 0)
+// 		i = -1;
+// 		while (++i <= count_fd)
 // 		{
-// 			close(end[0]);
-// 			close(end[1]);
-// 			close(adm->fd);
-// //			close(fd_entree);
-// 			return (1);
+// 			if (count_fd > 0 && i == count_fd)
+// 				break ;
+// 			pid[i] = fork();
+// 			if (pid[i] < 0)
+// 				return (1);
+// 			else if (pid[i] == 0)
+// 			{
+// 				if (count_fd > 0)
+// 				{
+// 					fd_in = ft_open_file(adm, i + 1);
+// 					dup2(fd_in, 0);
+// 					close(fd_in);
+// 				}
+// 				if (execve(exec[0], exec, adm->ev) == -1)
+// 					perror("execve");
+// 			}
 // 		}
-// 		else if (pid == 0)
+// 		free(exec);
+// 		i = -1;
+// 		while (++i <= count_fd)
 // 		{
-// 			close(end[0]);
-// //			close(0);
-// 			dup2(adm->fd, 0); // voir si utiliser dup2 ?
-// 			close(adm->fd);
-// //			dup2(fd_entree, 0); // voir si utiliser dup2 ?
-// //			close(fd_entree);
-// //			ft_child(adm, end, &fd_entree);
-// //			execution(cmdargs, 1);
-// //			msh = ttyname(0);
-// //			tty = isatty(0);
-// //printf(RED"ttyname = [%s] | tty = %d"RESET"\n", msh, tty);
-// printf(CYAN"exec[0]= [%s] | exec[1] = [%s]"RESET"\n", exec[0], exec[1]);
-// 			if (execve(exec[0], exec, adm->ev) == -1)
-// 				perror("execve");
-// //			ft_exit(cmdargs, 0);
-// 		}
-// 		else
-// 		{
-// 			waitpid(pid, NULL, 0);
-// 			close(end[1]);
-// 			adm->fd = end[0];
-// //			fd_entree = end[0];
+// 			if (count_fd > 0 && i == count_fd)
+// 				break ;
+// 			waitpid(pid[i], NULL, 0);
 // 		}
 // 	}
-	
-// //	status_child();
-// //	close(fd_entree);
-// //	close(end[1]);
-// 	else
-// 		pid = 0;
-// //printf(BLUE"On arrive la ?"RESET"\n");
-
-// 	adm->rd_in = -1;
 // 	return (0);
-// //	return (end[0]);
 // }
 
 int	ft_execute_prog(t_adm *adm)
 {
-    t_elm   *elm;
+	
 
-    elm = adm->head;
 	return (0);
 }
