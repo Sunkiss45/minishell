@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 12:50:54 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/16 15:24:57 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/31 17:04:17 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ char	*ft_strjoin_n(int size, char **strs);
 int		ft_strlen(char *s);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strncmp(char *s1, char *s2, int n);
+char	*ft_strchr(char c, char *set);
 char	*ft_strdup(char *src);
 char	*ft_strndup(char *src, int n);
 char	*ft_strdup_cut(char *str, char c);

@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:09:45 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/21 15:18:33 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/04/01 17:59:17 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,22 @@ typedef struct s_elm
 	char			*str;
 	char			*exe;
 	char			t;
+	struct s_pip	*pip;
 	struct s_elm	*next;
 	struct s_elm	*prev;
 }	t_elm;
+
+typedef struct s_pip
+{
+	char			**exec;
+	char			t;
+	int				pass;
+	int				fd_count;
+	int				fd_in[BUF_S];
+	int				fd_out;
+	struct s_pip	*next;
+	struct s_pip	*prev;
+}	t_pip;
 
 typedef struct s_dat
 {
@@ -74,6 +87,8 @@ typedef struct s_adm
 	char			**pth;
 	struct s_elm	*head;
 	struct s_elm	*tail;
+	struct s_pip	*piph;
+	struct s_pip	*pipt;
 	struct s_dat	*dat;
 	int				p;
 }	t_adm;
@@ -100,6 +115,7 @@ int		ft_execute_prog(t_adm *adm);
  *	srcs/define.c
  */
 
+int		is_file(t_elm *elm);
 int		ft_define_type(t_adm *adm, t_elm *elm);
 
 /*

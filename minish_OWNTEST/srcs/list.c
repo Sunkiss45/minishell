@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 15:27:46 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/24 15:05:32 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/30 15:39:39 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	ft_create_elm(char *str, t_adm *adm)
 		free(str);
 		return (1);
 	}
+	elm->pip = NULL;
 	ft_pointer_elm(elm, adm);
 	adm->tail->str = str;
 	t = str[0];

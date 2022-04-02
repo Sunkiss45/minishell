@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:37:03 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/23 17:20:03 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/04/01 15:42:27 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ void	ft_prompt(t_adm *adm)
 		r = ft_parse(adm);
 		if (r)
 			ft_perror("ft_parse", 0);
-		else if (adm->dat->arg && adm->dat->arg[0])
-			ft_execute_prog(adm);
+//		else if (adm->dat->x && adm->dat->arg[0])
+//			ft_execute_prog(adm);
 		ft_free_list(adm);
 		free(adm->dat->arg);
 		errno = 0;
@@ -70,6 +70,8 @@ int	main(int ac, char **av, char **env)
 	sigaction(SIGINT, &sa, NULL);
 	adm.head = NULL;
 	adm.tail = NULL;
+	adm.piph = NULL;
+	adm.pipt = NULL;
 	if (ft_recup_env(env, &adm))
 		return (ft_free(&adm, "ft_recup_env", 1));
 	if (ft_get_path(&adm))

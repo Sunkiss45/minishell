@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 11:59:00 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/25 16:17:21 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/03/28 15:55:15 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,8 @@
 
 int	ft_execute_prog(t_adm *adm)
 {
-	
+	t_elm	*elm;
 
+	elm = adm->head;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ebarguil <ebarguil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 13:30:10 by ebarguil          #+#    #+#             */
-/*   Updated: 2022/03/23 15:44:27 by ebarguil         ###   ########.fr       */
+/*   Updated: 2022/04/01 18:23:29 by ebarguil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,7 @@ int	ft_define_type(t_adm *adm, t_elm *elm)
 			if (x == 1)
 				elm->t = 'c';
 		}
-		if (elm->prev && (elm->prev->t == 'c' || elm->prev->t == 'o'
-				|| elm->prev->t == 'b') && elm->str[0] == '-')
+		if (elm->prev && (ft_strchr(elm->prev->t, "cbo")) && elm->str[0] == '-')
 			elm->t = 'o';
 		if (elm->t != 'b' && elm->t != 'c' && elm->t != 'o')
 			is_file(elm);
