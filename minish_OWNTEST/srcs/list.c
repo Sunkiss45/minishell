@@ -62,6 +62,8 @@ int	ft_create_elm(char *str, t_adm *adm)
 	if (t == '\'' || t == '\"' || t == '<' || t == '>' || t == '|')
 	{
 		adm->tail->t = t;
+		if (adm->tail->t == '<' && !ft_strcmp(str, "<<"))
+			adm->tail->t = 'h';
 		if (t == '|')
 			adm->p++;
 	}

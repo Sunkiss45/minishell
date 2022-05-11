@@ -45,6 +45,7 @@
 
 # define BUILTINS "echo cd pwd export unset env exit"
 # define BUF_S 1024
+//# define _POSIX_C_SOURCE 200809L // prend en compte le flag O_DIRECTORY
 
 typedef struct s_elm
 {
@@ -91,10 +92,11 @@ typedef struct s_adm
 	struct s_pip	*pipt;
 	struct s_dat	*dat;
 	int				p;
+	int				i;
 }	t_adm;
 
 /*
- *	srcs/quote.c 
+ *	srcs/parse.c 
  */
 
 int		ft_parse(t_adm *adm);
@@ -106,6 +108,22 @@ int		ft_parse(t_adm *adm);
 int		ft_init_list(char *arg, t_adm *adm, t_dat *dat);
 
 /*
+ *	srcs/jobs.c 
+ */
+
+void	ft_pointer_pip(t_pip *pip, t_adm *adm);
+char	ft_found_type(t_elm *elm);
+char	**ft_create_exec(t_elm *now);
+
+/*
+ *	srcs/redir.c 
+ */
+
+void	print_pip(t_pip *pip); /// A SUPPR
+int		ft_redir_in(t_adm *adm, t_pip *pip);
+int 	ft_redir_out(t_adm *adm, t_pip *pip);
+
+/*
  *	srcs/prog.c
  */
 
@@ -115,7 +133,7 @@ int		ft_execute_prog(t_adm *adm);
  *	srcs/define.c
  */
 
-int		is_file(t_elm *elm);
+void	is_file(t_elm *elm);
 int		ft_define_type(t_adm *adm, t_elm *elm);
 
 /*
@@ -123,6 +141,17 @@ int		ft_define_type(t_adm *adm, t_elm *elm);
  */
 
 int		ft_expand(t_adm *adm, t_elm *elm);
+
+/*
+ *	srcs/builtin.c
+ */
+
+int		ft_echo(char *s);
+void	ft_cd(t_adm *adm, t_elm *elm);
+void	ft_pwd(void);
+void	ft_export(char *s, t_adm *adm);
+void	ft_unset(char *s, t_adm *adm);
+void	ft_env(t_adm *adm);
 
 /*
  *	srcs/utils.c

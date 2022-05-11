@@ -40,14 +40,15 @@ void	ft_prompt(t_adm *adm)
 	{
 		adm->dat->arg = readline("minishell $> ");
 		add_history(adm->dat->arg);
-		printf(GREEN"arg = [%s]"RESET"\n", adm->dat->arg);
+printf(GREEN"arg = [%s]"RESET"\n", adm->dat->arg);
 		if (!adm->dat->arg || ft_strcmp(adm->dat->arg, "exit") == 0)
 			adm->dat->x = 0;
-		r = ft_parse(adm);
+		if (adm->dat->x)
+			r = ft_parse(adm);
 		if (r)
 			ft_perror("ft_parse", 0);
-//		else if (adm->dat->x && adm->dat->arg[0])
-//			ft_execute_prog(adm);
+		if (adm->dat->x && adm->dat->arg[0] && adm->piph)
+			ft_execute_prog(adm);
 		ft_free_list(adm);
 		free(adm->dat->arg);
 		errno = 0;
@@ -72,6 +73,7 @@ int	main(int ac, char **av, char **env)
 	adm.tail = NULL;
 	adm.piph = NULL;
 	adm.pipt = NULL;
+	adm.i = 0;
 	if (ft_recup_env(env, &adm))
 		return (ft_free(&adm, "ft_recup_env", 1));
 	if (ft_get_path(&adm))

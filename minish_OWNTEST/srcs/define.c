@@ -81,6 +81,8 @@ int	ft_define_type(t_adm *adm, t_elm *elm)
 		}
 		if (elm->prev && (ft_strchr(elm->prev->t, "cbo")) && elm->str[0] == '-')
 			elm->t = 'o';
+		if (elm->prev && elm->prev->t == 'h')
+			elm->t = 'w';
 		if (elm->t != 'b' && elm->t != 'c' && elm->t != 'o')
 			is_file(elm);
 		elm = elm->next;

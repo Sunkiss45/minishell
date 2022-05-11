@@ -26,9 +26,12 @@ vpath %.c srcs #va chercher les fichiers .c dans ts les dossiers repertories
 SRC			=	srcs/main.c \
 				srcs/parse.c \
 				srcs/list.c \
+				srcs/jobs.c \
+				srcs/redir.c \
 				srcs/define.c \
 				srcs/expand.c \
 				srcs/prog.c \
+				srcs/builtin.c \
 				srcs/utils.c \
 				srcs/free.c \
 
