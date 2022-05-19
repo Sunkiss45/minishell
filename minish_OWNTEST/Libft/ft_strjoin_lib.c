@@ -18,7 +18,7 @@ char	*ft_strjoin_lib(char *s1, char *s2)
 	int		i;
 	int		j;
 
-	if (!s1 || !s2)
+	if (!s1 && !s2)
 		return (NULL);
 	new = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
 	if (new == NULL)
@@ -26,12 +26,12 @@ char	*ft_strjoin_lib(char *s1, char *s2)
 	new[0] = '\0';
 	i = 0;
 	j = 0;
-	while (s1[i])
+	while (s1 && s1[i])
 	{
 		new[i] = s1[i];
 		i++;
 	}
-	while (s2[j])
+	while (s2 && s2[j])
 	{
 		new[i + j] = s2[j];
 		j++;

@@ -49,6 +49,7 @@ printf(GREEN"arg = [%s]"RESET"\n", adm->dat->arg);
 			ft_perror("ft_parse", 0);
 		if (adm->dat->x && adm->dat->arg[0] && adm->piph)
 			ft_execute_prog(adm);
+		ft_free_pip(adm);
 		ft_free_list(adm);
 		free(adm->dat->arg);
 		errno = 0;
@@ -57,8 +58,7 @@ printf(GREEN"arg = [%s]"RESET"\n", adm->dat->arg);
 
 int	main(int ac, char **av, char **env)
 {
-	struct sigaction	sa;
-	t_adm				adm;
+	t_adm	adm;
 
 	av = NULL;
 	if (ac != 1)
@@ -66,9 +66,7 @@ int	main(int ac, char **av, char **env)
 		errno = 2;
 		return (ft_perror("minishell", 1));
 	}
-	sa.sa_handler = &handle_sigint;
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
+	ft_signal();
 	adm.head = NULL;
 	adm.tail = NULL;
 	adm.piph = NULL;
@@ -79,7 +77,7 @@ int	main(int ac, char **av, char **env)
 	if (ft_get_path(&adm))
 		return (ft_perror("ft_get_path", 1));
 	adm.dat = malloc(sizeof(*adm.dat));
-	adm.buil = ft_split(BUILTINS, " ");
+		adm.buil = ft_split(BUILTINS, " ");
 	if (adm.dat == NULL || adm.buil == NULL)
 		return (ft_free(&adm, "main adm.dat", 1));
 	ft_prompt(&adm);

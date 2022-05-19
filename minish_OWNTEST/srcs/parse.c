@@ -22,11 +22,12 @@ int	ft_parse_job(t_adm *adm, t_elm *elm)
 	ft_pointer_pip(pip, adm);
 	pip->t = ft_found_type(elm);
 	pip->exec = ft_create_exec(elm);
-	if (ft_redir_in(adm, pip) == -1) 
+	pip->param = ft_save_param(elm);
+	if (ft_redir_in(adm, pip) == -1)
 		return (ft_perror("ft_redir", 0));
 	if (ft_redir_out(adm, pip) == -1)
 		return (ft_perror("ft_redir_out", 0));
-	print_pip(pip);
+	print_pip(pip); /// A SUPR ///
 	adm->i++;
 	return (0);
 }
@@ -88,6 +89,7 @@ int	ft_job(char *arg, t_adm *adm)
 		return (1);
 	x = 0;
 	elm = adm->head;
+	adm->i = 0;
 	while (elm != NULL && adm->i != adm->p)
 	{
 		if (!x && ft_strchr(elm->t, "cb<>h"))

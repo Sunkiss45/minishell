@@ -13,6 +13,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# define _POSIX_C_SOURCE 200809L
+
 # include <term.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -45,7 +47,6 @@
 
 # define BUILTINS "echo cd pwd export unset env exit"
 # define BUF_S 1024
-//# define _POSIX_C_SOURCE 200809L // prend en compte le flag O_DIRECTORY
 
 typedef struct s_elm
 {
@@ -61,12 +62,13 @@ typedef struct s_pip
 {
 	char			**exec;
 	char			t;
+	char			*param;
 	int				pass;
 	int				fd_count;
 	int				fd_in[BUF_S];
 	int				fd_out;
 	struct s_pip	*next;
-	struct s_pip	*prev;
+	struct s_pip	*prev;s
 }	t_pip;
 
 typedef struct s_dat
@@ -91,6 +93,8 @@ typedef struct s_adm
 	struct s_pip	*piph;
 	struct s_pip	*pipt;
 	struct s_dat	*dat;
+	int				end[BUF_S];
+	int				pid[BUF_S];
 	int				p;
 	int				i;
 }	t_adm;
@@ -114,6 +118,7 @@ int		ft_init_list(char *arg, t_adm *adm, t_dat *dat);
 void	ft_pointer_pip(t_pip *pip, t_adm *adm);
 char	ft_found_type(t_elm *elm);
 char	**ft_create_exec(t_elm *now);
+char	*ft_save_param(t_elm *now);
 
 /*
  *	srcs/redir.c 
@@ -146,18 +151,19 @@ int		ft_expand(t_adm *adm, t_elm *elm);
  *	srcs/builtin.c
  */
 
-int		ft_echo(char *s);
-void	ft_cd(t_adm *adm, t_elm *elm);
-void	ft_pwd(void);
-void	ft_export(char *s, t_adm *adm);
-void	ft_unset(char *s, t_adm *adm);
-void	ft_env(t_adm *adm);
+int		ft_echo(t_pip *pip);
+int		ft_cd(t_adm *adm, t_pip *pip);
+int		ft_pwd(void);
+int		ft_export(char *s, t_adm *adm); /// ATT
+int		ft_unset(char *s, t_adm *adm);
+int		ft_env(t_adm *adm);
 
 /*
  *	srcs/utils.c
  */
 
 void	handle_sigint(int sig);
+void	ft_signal(void);
 int		ft_get_path(t_adm *adm);
 int		ft_perror(char *s, int x);
 
@@ -165,7 +171,9 @@ int		ft_perror(char *s, int x);
  *	srcs/free.c
  */
 
+void	ft_free_pip(t_adm *adm);
 void	ft_free_list(t_adm *adm);
+int		ft_return_free(char *s, int x);
 int		expand_free(char **new, int x);
 int		ft_free(t_adm *adm, char *str, int x);
 

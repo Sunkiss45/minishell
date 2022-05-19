@@ -64,6 +64,32 @@ int	ft_count_op(t_elm *now)
 	return (op);
 }
 
+char	*ft_save_param(t_elm *now)
+{
+	char	*param;
+	char	*tmp;
+	int		i;
+
+	param = NULL;
+	now = now->next;
+	i = -1;
+	while (now != NULL && !ft_strchr(now->t, "><|") && ++i != -1)
+	{
+		if (i && now->prev->t != now->t)
+		{
+			tmp = param; 
+			param = ft_strjoin_lib(tmp, " ");
+			free(tmp);
+		}
+		tmp = param;
+		param = ft_strjoin_lib(tmp, now->str);
+		if (i)
+			free(tmp);
+		now = now->next;
+	}
+	return (param);
+}
+
 char	**ft_create_exec(t_elm *now)
 {
 	char	**exec;
@@ -97,7 +123,6 @@ printf(GREEN"exec[%d] = [%s]"RESET"\n", i, exec[i]);
 		i++;
 	if (op != 0)
 		exec[i] = NULL;
-
 	return (exec);
 }
 
@@ -142,7 +167,8 @@ void	ft_pointer_pip(t_pip *pip, t_adm *adm)
 	}
 	pip->exec = NULL;
 	pip->t = '\0';
+	pip->param = "\0";
 	pip->pass = 0;
 	pip->fd_count = ft_count_fd(adm);
-	pip->fd_out = -2;
+	pip->fd_out = 500;
 }

@@ -12,6 +12,33 @@
 
 #include "minishell.h"
 
+void	ft_free_pip(t_adm *adm)
+{
+	t_pip	*now;
+
+	now = adm->piph;
+	while (now != NULL)
+	{
+		if (now->param)
+			free(now->param);
+		now = now->next;
+		if (now == NULL)
+		{
+			if (adm->pipt->exec)
+				free(adm->pipt->exec);
+			free(adm->pipt);
+		}
+		else
+		{
+			if (now->prev->exec)
+				free(now->prev->exec);
+			free(now->prev);
+		}
+	}
+	adm->piph = NULL;
+	adm->pipt = NULL;
+}
+
 void	ft_free_list(t_adm *adm)
 {
 	t_elm	*now;
@@ -19,7 +46,7 @@ void	ft_free_list(t_adm *adm)
 	now = adm->head;
 	while (now != NULL)
 	{
-		printf(YELLOW"[%s] | [%c]"RESET"\n", now->str, now->t);
+printf(YELLOW"[%s] | [%c]"RESET"\n", now->str, now->t);
 		now = now->next;
 		if (now == NULL)
 		{
@@ -38,6 +65,13 @@ void	ft_free_list(t_adm *adm)
 	}
 	adm->head = NULL;
 	adm->tail = NULL;
+}
+
+int	ft_return_free(char *s, int x)
+{
+	if (s)
+		free(s);
+	return (x);
 }
 
 int	expand_free(char **new, int x)
@@ -67,5 +101,6 @@ int	ft_free(t_adm *adm, char *str, int x)
 		ft_free_list(adm);
 	if (errno != 0 && str)
 		perror(str);
+	rl_clear_history();
 	return (x);
 }
