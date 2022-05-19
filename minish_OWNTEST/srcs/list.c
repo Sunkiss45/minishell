@@ -59,13 +59,12 @@ int	ft_create_elm(char *str, t_adm *adm)
 	ft_pointer_elm(elm, adm);
 	adm->tail->str = str;
 	t = str[0];
+printf(RED"str = [%s]"RESET"\n", adm->tail->str);
 	if (t == '\'' || t == '\"' || t == '<' || t == '>' || t == '|')
 	{
 		adm->tail->t = t;
 		if (adm->tail->t == '<' && !ft_strcmp(str, "<<"))
-			adm->tail->t = 'h';
-		if (adm->tail->t == '>' && !ft_strcmp(str, ">>"))
-			adm->tail->t = 'a';
+			adm->tail->t = 't';
 		if (t == '|')
 			adm->p++;
 	}

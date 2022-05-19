@@ -48,6 +48,14 @@
 # define BUILTINS "echo cd pwd export unset env exit"
 # define BUF_S 1024
 
+typedef struct s_env
+{
+	char			*var;
+	char			*val;
+	char			*line;
+	struct s_env	*next;
+}	t_env;
+
 typedef struct s_elm
 {
 	char			*str;
@@ -68,7 +76,7 @@ typedef struct s_pip
 	int				fd_in[BUF_S];
 	int				fd_out;
 	struct s_pip	*next;
-	struct s_pip	*prev;s
+	struct s_pip	*prev;
 }	t_pip;
 
 typedef struct s_dat
@@ -92,6 +100,8 @@ typedef struct s_adm
 	struct s_elm	*tail;
 	struct s_pip	*piph;
 	struct s_pip	*pipt;
+	struct s_env	*envh;
+	struct s_env	*envt;
 	struct s_dat	*dat;
 	int				end[BUF_S];
 	int				pid[BUF_S];

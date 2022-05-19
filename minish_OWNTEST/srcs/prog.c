@@ -12,53 +12,7 @@
 
 #include "minishell.h"
 
-// void	exec_builtin(t_adm *adm)
-// {
-// 	t_elm	*now;
-
-// 	now = adm->head; 
-// 	while (now != NULL)
-// 	{
-// 		if (now->t == 'b')
-// 		{
-// 			if (!ft_strncmp(now->str, "cd", 2) && now->next)
-// 				ft_cd(adm, now->next);
-// 			if (ft_strncmp(now->str,"echo", 4) == 0)
-// 				ft_echo(now->next->str);
-// 			if (ft_strcmp(now->str, "pwd") == 0)
-// 				ft_pwd(); //OK
-// 			if (ft_strncmp(now->str, "unset", 5) == 0)
-// 				ft_unset(now->next->str, adm); //OK
-// 			if (ft_strcmp(now->str, "env") == 0)
-// 				ft_env(adm); //OK
-// 			if (ft_strncmp(now->str, "export", 6) == 0)
-// 				ft_export(&now->str[7], adm); //OK
-// 			break ;
-// 		}
-// 		now = now->next;
-// 	}
-// 	exit (0);
-// }
-
-// void	exec_builtin(t_adm *adm, t_pip *pip)
-// {
-// //// definir dans pip->exec[1] les parametres des builtins ! ///////
-// 	//if (!ft_strncmp(pip->exec[0], "cd", 2))
-// //		ft_cd(adm, now->next);
-// 	//if (ft_strncmp(pip->exec[0],"echo", 4) == 0)
-// //		ft_echo(pip->exec[1]);
-// //		ft_echo(now->next->str);
-// 	if (ft_strcmp(pip->exec[0], "pwd") == 0)
-// 		ft_pwd();
-// 	//if (ft_strncmp(pip->exec[0], "unset", 5) == 0)
-// //		ft_unset(now->next->str, adm);
-// 	if (ft_strcmp(pip->exec[0], "env") == 0)
-// 		ft_env(adm);
-// 	//if (ft_strncmp(pip->exec[0], "export", 6) == 0)
-// //		ft_export(&now->str[7], adm);
-// }
-
-int	exec_builtin(t_adm *adm, t_pip *pip)
+int	exec_builtin(t_adm *adm, t_pip *pip, int x)
 {
 	int	e;
 
@@ -75,7 +29,10 @@ int	exec_builtin(t_adm *adm, t_pip *pip)
 		e = ft_unset(pip->param, adm);
 	if (!ft_strcmp(pip->exec[0], "export"))
 		e = ft_export(pip->param, adm);
-	exit (e);
+	if (x == 0)
+		return (e);
+	else
+		exit (e);
 }
 
 void	close_all_fd(t_adm *adm)
@@ -191,11 +148,11 @@ void	ft_exec_job(t_adm *adm, t_pip *job, int j)
 				close_all_fd(adm);
 			}
 			if (job->t == 'b')
-				if (exec_builtin(adm, job) == -1)
-					perror("exec_builtin");
+				if (exec_builtin(adm, job, 1) == -1)
+					ft_perror("exec_builtin", -1);
 			if (job->t == 'c')
 				if (execve(job->exec[0], job->exec, adm->ev) == -1)
-					perror("execve");
+					ft_perror("execve", -1);
 		}
 	}
 }
@@ -208,8 +165,13 @@ int	ft_execute_prog(t_adm *adm)
 printf("ft_execute_prog\n");
 	job = adm->piph;
 // ATTENTION ici il faut mute les signaux (pour eviter des pb)
-	if (adm->p == 1)
+	if (adm->p == 1 && job->t == 'c')
 		ft_exec_job(adm, job, 0);
+	else if (adm->p == 1 && job->t == 'b')
+	{
+		if (exec_builtin(adm, job, 0) == -1)
+			ft_perror("exec_builtin", -1);
+	}
 	else
 	{
 		if (open_pipes(adm) == -1)

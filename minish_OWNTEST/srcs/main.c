@@ -12,21 +12,82 @@
 
 #include "minishell.h"
 
+// int	ft_recup_env(char **env, t_adm *adm)
+// {
+// 	int		i;
+// 	char	*tmp;
+
+// 	i = 0;
+// 	while (env[i])
+// 		i++;
+// 	tmp = ft_strjoin_n(i, env);
+// 	if (tmp == NULL)
+// 		return (1);
+// 	adm->ev = ft_split_lib(tmp, '\n');
+// 	free(tmp);
+// 	if (adm->ev == NULL)
+// 		return (1);
+// 	return (0);
+// }
+
+void	ft_pointer_ev(t_env *ev, t_adm *adm)
+{
+	if (!adm->envh)
+	{
+		adm->envh = ev;
+		adm->envt = ev;
+		ev->next = NULL;
+	}
+	else
+	{
+		adm->envt->next = ev;
+		adm->envt = ev;
+		ev->next = NULL;
+	}
+}
+
+int	ft_split_env(t_env *ev, char *str)
+{
+	char	*tmp;
+
+	tmp = ft_strchr('=', str);
+	ev->var = ft_strndup(str, (tmp - &str[0]));
+	if (ev->var == NULL)
+		return (1);
+	ev->val = ft_strdup(&tmp[1]);
+	if (ev->val == NULL)
+		return (1);
+	return (0);
+}
+
+int	ft_create_ev(t_adm *adm, char *str)
+{
+	t_env	*ev;
+	
+	ev = malloc(sizeof(*ev));
+	if (ev == NULL)
+		return (1);
+	ft_pointer_ev(ev, adm);
+	ev->line = str;
+	if (ft_split_env(ev, str))
+		return (1);
+	return (0);
+}
+
 int	ft_recup_env(char **env, t_adm *adm)
 {
 	int		i;
-	char	*tmp;
 
 	i = 0;
+	adm->envh = NULL;
+	adm->envt = NULL;
+
 	while (env[i])
+	{
+		if (ft_create_ev(adm, env[i]))
+			return (1);
 		i++;
-	tmp = ft_strjoin_n(i, env);
-	if (tmp == NULL)
-		return (1);
-	adm->ev = ft_split_lib(tmp, '\n');
-	free(tmp);
-	if (adm->ev == NULL)
-		return (1);
+	}
 	return (0);
 }
 

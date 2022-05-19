@@ -71,7 +71,8 @@ char	*ft_save_param(t_elm *now)
 	int		i;
 
 	param = NULL;
-	now = now->next;
+	while (now != NULL && ft_strchr(now->t, "cbo"))
+		now = now->next;
 	i = -1;
 	while (now != NULL && !ft_strchr(now->t, "><|") && ++i != -1)
 	{

@@ -83,6 +83,7 @@ typedef struct s_gnl
 }	t_gnl;
 
 char	*gnl(int fd);
+int		ft_strche(char *s, char c, int x);
 
 /*
  * === ft_bzero === *

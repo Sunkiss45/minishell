@@ -58,8 +58,6 @@ char	*ft_take_exp(t_adm *adm, char *str, int *d)
 	return (ret);
 }
 
-/* c nôté */
-
 int	ft_cut_exp(char **new, t_adm *adm, t_elm *elm, int *i)
 {
 	char	*tmp;
