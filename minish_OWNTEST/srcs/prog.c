@@ -157,6 +157,35 @@ void	ft_exec_job(t_adm *adm, t_pip *job, int j)
 	}
 }
 
+int	ft_listev_to_tabev(t_adm *adm)
+{
+	t_env	*ev;
+	char	*tmp;
+	char	*ln;
+
+	ev = adm->envh;
+	ln = NULL;
+	while (ev != NULL)
+	{
+		tmp = ln;
+		ln = ft_strjoin_lib(tmp, ev->line);
+		free(tmp);
+		if (ln == NULL)
+			return (1);
+		tmp = ln;
+		ln = ft_strjoin_lib(tmp, "\n");
+		free(tmp);
+		if (ln == NULL)
+			return (1);
+		ev = ev->next;
+	}
+	adm->ev = ft_split_lib(ln, '\n');
+ 	free(ln);
+ 	if (adm->ev == NULL)
+ 		return (1);
+	return (0);
+}
+
 int	ft_execute_prog(t_adm *adm)
 {
 	t_pip	*job;
@@ -164,6 +193,8 @@ int	ft_execute_prog(t_adm *adm)
 
 printf("ft_execute_prog\n");
 	job = adm->piph;
+	if (ft_listev_to_tabev(adm))
+		return (ft_perror("list_to_tabev", -1));
 // ATTENTION ici il faut mute les signaux (pour eviter des pb)
 	if (adm->p == 1 && job->t == 'c')
 		ft_exec_job(adm, job, 0);
@@ -187,6 +218,8 @@ printf("ft_execute_prog\n");
 	}
 	close_all_fd(adm);
 	wait_all_pid(adm);
+	if (adm->ev)
+		adm->ev = ft_free_split(adm->ev);
 	ft_signal(); // ATTENTION ici remettre les signaux de base
 	return (0);
 }

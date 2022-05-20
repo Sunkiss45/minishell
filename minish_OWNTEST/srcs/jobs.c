@@ -76,7 +76,7 @@ char	*ft_save_param(t_elm *now)
 	i = -1;
 	while (now != NULL && !ft_strchr(now->t, "><|") && ++i != -1)
 	{
-		if (i && now->prev->t != now->t)
+		if (i) //&& now->prev->t == now->t)
 		{
 			tmp = param; 
 			param = ft_strjoin_lib(tmp, " ");

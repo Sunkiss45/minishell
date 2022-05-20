@@ -12,30 +12,24 @@
 
 #include "minishell.h"
 
-int	ft_check_exp(char **ev, char *buf)
+t_env	*ft_check_exp(t_adm *adm, char *buf)
 {
-	char	evc[BUF_S];
-	int		i;
-	int		y;
+	t_env	*ev;
 
-	i = -1;
-	while (ev[++i])
+	ev = adm->envh;
+	while (ev != NULL)
 	{
-		y = -1;
-		ft_bzero(evc, BUF_S);
-		while (ev[i][++y] != '=')
-			evc[y] = ev[i][y];
-		if (ft_strncmp(buf, evc, ft_strlen(evc)) == 0)
-			return (i);
+		if (!ft_strcmp(buf, ev->var))
+			return (ev);
+		ev = ev->next;
 	}
-	return (-1);
+	return (NULL);
 }
 
 char	*ft_take_exp(t_adm *adm, char *str, int *d)
 {
 	char	buf[BUF_S];
 	char	*ret;
-	int		x;
 	int		i;
 
 	i = 0;
@@ -47,14 +41,13 @@ char	*ft_take_exp(t_adm *adm, char *str, int *d)
 		i++;
 	}
 	*d += i;
-	x = ft_check_exp(adm->ev, buf);
-	if (x == -1)
+	if (!ft_check_exp(adm, buf))
 	{
 		ret = malloc(sizeof(char) * 1);
 		ret[0] = '\0';
 		return (ret);
 	}
-	ret = ft_strdup(&adm->ev[x][i + 1]);
+	ret = ft_strdup(ft_check_exp(adm, buf)->val);
 	return (ret);
 }
 
@@ -101,7 +94,6 @@ int	ft_parse_exp(t_adm *adm, t_elm *elm)
 
 int	ft_expand(t_adm *adm, t_elm *elm)
 {
-	adm->p = adm->p;
 	while (elm != NULL)
 	{
 		if (elm->t == '\0' || elm->t == '\"')

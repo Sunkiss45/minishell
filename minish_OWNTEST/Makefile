@@ -24,6 +24,7 @@ LIB			=	-L./Libft -lft -L./local/lib -lreadline
 vpath %.c srcs #va chercher les fichiers .c dans ts les dossiers repertories
 
 SRC			=	srcs/main.c \
+				srcs/env.c \
 				srcs/parse.c \
 				srcs/list.c \
 				srcs/jobs.c \
@@ -33,6 +34,7 @@ SRC			=	srcs/main.c \
 				srcs/prog.c \
 				srcs/builtin.c \
 				srcs/utils.c \
+				srcs/freelist.c \
 				srcs/free.c \
 
 OBJ			=	$(SRC:srcs/%.c=objects/%.o)

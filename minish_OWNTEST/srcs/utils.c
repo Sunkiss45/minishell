@@ -33,16 +33,18 @@ void	ft_signal(void)
 
 int	ft_get_path(t_adm *adm)
 {
-	char	**ev;
-	int		i;
+	t_env	*ev;
 
-	adm->pth = NULL;
-	ev = adm->ev;
-	i = 0;
-	while (ev[++i])
-		if (ev[i][0] == 'P' && ev[i][1] == 'A' && ev[i][2] == 'T'
-			&& ev[i][3] == 'H' && ev[i][4] == '=')
-			adm->pth = ft_split_add(&ev[i][5], ":");
+	ev = adm->envh;
+	while (ev != NULL)
+	{
+		if (!ft_strncmp(ev->var, "PATH", 4))
+		{
+			adm->pth = ft_split_add(ev->val, ":");
+			break ;
+		}
+		ev = ev->next;
+	}
 	if (errno != 0 && adm->pth == NULL)
 		return (1);
 	return (0);
@@ -54,12 +56,3 @@ int	ft_perror(char *s, int x)
 	errno = 0;
 	return (x);
 }
-
-// A SUPR -> c'est pour travailler sur Windows !!!!
-	// i = -1;
-	// while (adm->pth[++i])
-	// 	if (adm->pth[i][0] == '/' && adm->pth[i][1] == 'm'
-	// 		&& adm->pth[i][2] == 'n' && adm->pth[i][3] == 't'
-	// 		&& adm->pth[i][4] == '/')
-	// 		adm->pth[i][0] = '\0';
-// A SUPR

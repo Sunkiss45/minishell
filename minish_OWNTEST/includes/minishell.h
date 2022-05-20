@@ -110,6 +110,14 @@ typedef struct s_adm
 }	t_adm;
 
 /*
+ *	srcs/env.c 
+ */
+
+int		ft_create_ev(t_adm *adm, char *str);
+void	ft_supr_ev(t_adm *adm, t_env *ev);
+int		ft_recup_env(char **env, t_adm *adm);
+
+/*
  *	srcs/parse.c 
  */
 
@@ -181,6 +189,7 @@ int		ft_perror(char *s, int x);
  *	srcs/free.c
  */
 
+void	ft_free_env(t_adm *adm);
 void	ft_free_pip(t_adm *adm);
 void	ft_free_list(t_adm *adm);
 int		ft_return_free(char *s, int x);
