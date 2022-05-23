@@ -34,8 +34,7 @@ char	*ft_take_exp(t_adm *adm, char *str, int *d)
 
 	i = 0;
 	ft_bzero(buf, BUF_S);
-	while ((str[i] >= 65 && str[i] <= 90) || (str[i] >= 97 && str[i] <= 122)
-		|| (str[i] >= 48 && str[i] <= 57) || str[i] == 95)
+	while (str[i] && str[i] != '=')
 	{
 		buf[i] = str[i];
 		i++;

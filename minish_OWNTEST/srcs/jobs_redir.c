@@ -13,24 +13,13 @@
 #include "minishell.h"
 
 ///// A SUPR /////
-void	print_pip(t_pip *pip)
+/*void	print_pip(t_pip *pip)
 {
 	int	j;
 
 	printf(BLUE"pip->t = [%c]"RESET"\n", pip->t);
 	printf(BLUE"pip->param = [%s]"RESET"\n", pip->param);
-	printf(BLUE"pip->fd_count = [%d]"RESET"\n", pip->fd_count);
-	j = 0;
-	if (pip->fd_count)
-	{
-		while (j < pip->fd_count)
-		{
-			printf(BLUE"pip->fd_in[%d] = [%d]"RESET"\n", j, pip->fd_in[j]);
-			j++;
-		}
-	}
-	else if (!pip->fd_count)
-		printf(BLUE"pip->fd_in[%d] = [%d]"RESET"\n", j, pip->fd_in[j]);
+	printf(BLUE"pip->fd_in = [%d]"RESET"\n", pip->fd_in);
 	printf(BLUE"pip->fd_out = [%d]"RESET"\n", pip->fd_out);
 	j = 0;
 	while (pip->exec && pip->exec[j])
@@ -38,38 +27,51 @@ void	print_pip(t_pip *pip)
 		printf(BLUE"pip->exec[%d] = [%s]"RESET"\n", j, pip->exec[j]);
 		j++;
 	}
-}
+}*/
 ///// A SUPR /////
 
-int ft_redir_out(t_adm *adm, t_pip *pip)
+int	ft_append_fd(char *str)
+{
+	int	fd_out;
+
+	if (access(str, F_OK) != 0
+		|| (access(str, R_OK | W_OK) != 0 && !unlink(str)))
+		fd_out = open(str, O_CREAT | O_APPEND | O_RDWR | O_TRUNC, 0644);
+	else
+		fd_out = open(str, O_APPEND | O_RDWR);
+	return (fd_out);
+}	
+
+int	ft_open_fd(char *str)
+{
+	int	fd_out;
+
+	if (access(str, F_OK) != 0
+		|| (access(str, R_OK | W_OK) != 0 && !unlink(str)))
+		fd_out = open(str, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	else
+		fd_out = open(str, O_RDWR | O_TRUNC);
+	return (fd_out);
+}
+
+int	ft_redir_out(t_adm *adm, t_pip *pip)
 {
 	t_elm	*now;
 
 	now = adm->head;
 	while (now != NULL)
 	{
-		if ((now->t == '>' || now->t == 'a') && now->next && adm->i == adm->p - 1)
+		if ((now->t == '>' || now->t == 'a')
+			&& now->next && adm->i == adm->p - 1)
 		{
 			if (now->t == '>')
-			{
-				if (access(now->next->str, F_OK) != 0
-				|| (access(now->next->str, R_OK | W_OK) != 0 && !unlink(now->next->str)))
-					pip->fd_out = open(now->next->str, O_CREAT | O_RDWR | O_TRUNC, 0644);
-				else
-					pip->fd_out = open(now->next->str, O_RDWR | O_TRUNC);
-			}
+				pip->fd_out = ft_open_fd(now->next->str);
 			if (now->t == 'a')
-			{
-				if (access(now->next->str, F_OK) != 0
-				|| (access(now->next->str, R_OK | W_OK) != 0 && !unlink(now->next->str)))
-					pip->fd_out = open(now->next->str, O_CREAT | O_APPEND | O_RDWR | O_TRUNC, 0644);
-				else
-					pip->fd_out = open(now->next->str, O_APPEND | O_RDWR | O_TRUNC);
-			}			
+				pip->fd_out = ft_append_fd(now->next->str);
 		}
 		now = now->next;
 	}
-	return (-3);
+	return (1);
 }
 
 int	readline_heredoc(char *delim)
@@ -99,27 +101,26 @@ int	readline_heredoc(char *delim)
 int	ft_redir_in(t_adm *adm, t_pip *pip)
 {
 	t_elm	*now;
-	int		i;
 
 	now = adm->head;
-	i = 0;
-	while (now != NULL && now->t != '|')
+	if (adm->i != 0)
+		return (0);
+	while (now != NULL && !ft_strchr(now->t, ">a|"))
 	{
-		pip->fd_in[i] = 499;
-		if (now->t == 'f' && i < pip->fd_count)
+		if (now->t == 'f')
 		{
-			pip->fd_in[i] = open(now->str, O_RDONLY);
-			if (pip->fd_in[i] == -1)
+			pip->fd_in = open(now->str, O_RDONLY);
+			if (pip->fd_in == -1)
 				return (-1);
-			i++;
 		}
 		if (now->t == 'w')
 		{
-			pip->fd_in[i] = readline_heredoc(now->str);
-			if (pip->fd_in[i] == -1)
+			pip->fd_in = readline_heredoc(now->str);
+			if (pip->fd_in == -1)
 				return (-1);
+			break ;
 		}
 		now = now->next;
 	}
-	return (-3);
+	return (0);
 }

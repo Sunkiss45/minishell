@@ -46,7 +46,10 @@
 # define RESET "\033[0m"
 
 # define BUILTINS "echo cd pwd export unset env exit"
+# define EKONVEU "minishell: not a valid identifier\n"
 # define BUF_S 1024
+
+extern int	g_sig;
 
 typedef struct s_env
 {
@@ -72,8 +75,7 @@ typedef struct s_pip
 	char			t;
 	char			*param;
 	int				pass;
-	int				fd_count;
-	int				fd_in[BUF_S];
+	int				fd_in;
 	int				fd_out;
 	struct s_pip	*next;
 	struct s_pip	*prev;
@@ -107,6 +109,7 @@ typedef struct s_adm
 	int				pid[BUF_S];
 	int				p;
 	int				i;
+	int				sig;
 }	t_adm;
 
 /*
@@ -124,27 +127,38 @@ int		ft_recup_env(char **env, t_adm *adm);
 int		ft_parse(t_adm *adm);
 
 /*
+ *	srcs/signal.c
+ */
+
+void	ft_signal(void);
+
+/*
  *	srcs/list.c 
  */
 
 int		ft_init_list(char *arg, t_adm *adm, t_dat *dat);
 
 /*
- *	srcs/jobs.c 
+ *	srcs/jobs_init.c 
  */
 
-void	ft_pointer_pip(t_pip *pip, t_adm *adm);
+int		ft_parse_job(t_adm *adm, t_elm *elm);
+
+/*
+ *	srcs/jobs_param.c 
+ */
+
 char	ft_found_type(t_elm *elm);
-char	**ft_create_exec(t_elm *now);
+char	**ft_create_exec(t_elm *now, int i);
 char	*ft_save_param(t_elm *now);
 
 /*
- *	srcs/redir.c 
+ *	srcs/jobs_redir.c 
  */
 
 void	print_pip(t_pip *pip); /// A SUPPR
 int		ft_redir_in(t_adm *adm, t_pip *pip);
-int 	ft_redir_out(t_adm *adm, t_pip *pip);
+int		ft_redir_out(t_adm *adm, t_pip *pip);
 
 /*
  *	srcs/prog.c
@@ -153,10 +167,18 @@ int 	ft_redir_out(t_adm *adm, t_pip *pip);
 int		ft_execute_prog(t_adm *adm);
 
 /*
+ *	srcs/prog_bis.c
+ */
+
+void	close_all_fd(t_adm *adm);
+int		open_pipes(t_adm *adm);
+int		wait_all_pid(t_adm *adm);
+int		exec_builtin(t_adm *adm, t_pip *pip, int x);
+
+/*
  *	srcs/define.c
  */
 
-void	is_file(t_elm *elm);
 int		ft_define_type(t_adm *adm, t_elm *elm);
 
 /*
@@ -172,16 +194,23 @@ int		ft_expand(t_adm *adm, t_elm *elm);
 int		ft_echo(t_pip *pip);
 int		ft_cd(t_adm *adm, t_pip *pip);
 int		ft_pwd(void);
-int		ft_export(char *s, t_adm *adm); /// ATT
 int		ft_unset(char *s, t_adm *adm);
-int		ft_env(t_adm *adm);
+int		ft_env(t_adm *adm, t_pip *pip);
+
+/*
+ *	srcs/buil_export.c
+ */
+
+int		ft_export(char *s, t_adm *adm);
+int		ft_export_alpha(t_adm *adm);
 
 /*
  *	srcs/utils.c
  */
 
-void	handle_sigint(int sig);
-void	ft_signal(void);
+void	ft_pointer_elm(t_elm *elm, t_adm *adm);
+void	is_file(t_elm *elm);
+void	*ft_set_shlvl(t_adm *adm);
 int		ft_get_path(t_adm *adm);
 int		ft_perror(char *s, int x);
 

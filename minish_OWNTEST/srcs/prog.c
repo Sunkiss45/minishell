@@ -12,93 +12,6 @@
 
 #include "minishell.h"
 
-int	exec_builtin(t_adm *adm, t_pip *pip, int x)
-{
-	int	e;
-
-	e = 0;
-	if (!ft_strcmp(pip->exec[0], "echo"))
-		e = ft_echo(pip);
-	if (!ft_strcmp(pip->exec[0], "cd"))
-		e = ft_cd(adm, pip);
-	if (!ft_strcmp(pip->exec[0], "pwd"))
-		e = ft_pwd();
-	if (!ft_strcmp(pip->exec[0], "env"))
-		e = ft_env(adm);
-	if (!ft_strcmp(pip->exec[0], "unset"))
-		e = ft_unset(pip->param, adm);
-	if (!ft_strcmp(pip->exec[0], "export"))
-		e = ft_export(pip->param, adm);
-	if (x == 0)
-		return (e);
-	else
-		exit (e);
-}
-
-void	close_all_fd(t_adm *adm)
-{
-	t_pip	*job;
-	int		i;
-
-	job = adm->piph;
-	if (adm->p == 1)
-	{
-		i = -1;
-		while (++i <= job->fd_count)
-		{
-			if (job->fd_count > 0 && i == job->fd_count)
-				break ;
-			close(job->fd_in[i]);
-		}
-		close(job->fd_out);
-	}
-	if (adm->p > 1)
-	{
-		while (job != NULL)
-		{
-			i = -1;
-			while (++i < job->fd_count)
-				if (job->fd_in[i] > 2)
-					close(job->fd_in[i]);
-			if (job->fd_count > 2)
-				close(job->fd_out);
-			job = job->next;
-		}
-	i = -1;
-	while (++i < (adm->p * 2 - 2))
-		close(adm->end[i]);
-	}
-}
-
-int	open_pipes(t_adm *adm)
-{
-	int		i;
-
-	i = 0;
-	while (i < (adm->p * 2 - 2))
-	{
-		if (pipe(&adm->end[i]) == -1)
-			return (ft_perror("open_pipes", -1));
-		i += 2;
-	}
-	return (0);
-}
-
-void	wait_all_pid(t_adm *adm)
-{
-	int		j;
-	t_pip	*job;
-
-	j = 0;
-	job = adm->piph;
-	while (job != NULL && j < (adm->p + job->fd_count))
-	{
-		waitpid(adm->pid[j], NULL, 0);
-		j++;
-		job = job->next;
-	}
-}
-
 void	redir_pipe_ends(t_adm *adm)
 {
 	t_pip	*job;
@@ -113,10 +26,10 @@ void	redir_pipe_ends(t_adm *adm)
 		if (i == 0)
 			job->fd_out = adm->end[1];
 		else if (i == adm->p - 1)
-			job->fd_in[0] = adm->end[((adm->p - 1) * 2) - 2];
+			job->fd_in = adm->end[((adm->p - 1) * 2) - 2];
 		else
 		{
-			job->fd_in[0] = adm->end[j];
+			job->fd_in = adm->end[j];
 			job->fd_out = adm->end[j + 3];
 			j += 2;
 		}
@@ -127,33 +40,30 @@ void	redir_pipe_ends(t_adm *adm)
 
 void	ft_exec_job(t_adm *adm, t_pip *job, int j)
 {
-	int	i;
-
-	i = -1;
-	while (++i <= job->fd_count)
+	adm->pid[j] = fork();
+	if (adm->pid[j] < 0)
+		return ;
+	else if (adm->pid[j] == 0)
 	{
-		if (job->fd_count > 0 && i == job->fd_count)
-			break ;
-// ATTENTION ici il faut mute les signaux (pour eviter des pb)
-		adm->pid[j] = fork();
-		ft_signal(); // redefinir les signaux selon le comportement attendu
-		if (adm->pid[j] < 0)
-			return ;
-		else if (adm->pid[j] == 0)
+		if (job->t == '\0')
 		{
-			if (job->fd_count >= 0)
+			if (job->exec[0])
 			{
-				dup2(job->fd_in[i], STDIN_FILENO);
-				dup2(job->fd_out, STDOUT_FILENO);
-				close_all_fd(adm);
+				write(1, "minishell: ", 11);
+				write(1, job->exec[0], ft_strlen(job->exec[0]));
+				write(1, ": command not found\n", 20);
 			}
-			if (job->t == 'b')
-				if (exec_builtin(adm, job, 1) == -1)
-					ft_perror("exec_builtin", -1);
-			if (job->t == 'c')
-				if (execve(job->exec[0], job->exec, adm->ev) == -1)
-					ft_perror("execve", -1);
+			exec_builtin(adm, job, 1);
 		}
+		dup2(job->fd_in, STDIN_FILENO);
+		dup2(job->fd_out, STDOUT_FILENO);
+		if (job->t == 'b')
+			if (exec_builtin(adm, job, 1) == -1)
+				ft_perror("exec_builtin", -1);
+		close_all_fd(adm);
+		if (job->t == 'c')
+			if (execve(job->exec[0], job->exec, adm->ev) == -1)
+				ft_perror("execve", -1);
 	}
 }
 
@@ -180,46 +90,53 @@ int	ft_listev_to_tabev(t_adm *adm)
 		ev = ev->next;
 	}
 	adm->ev = ft_split_lib(ln, '\n');
- 	free(ln);
- 	if (adm->ev == NULL)
- 		return (1);
+	free(ln);
+	if (adm->ev == NULL)
+		return (1);
+	return (0);
+}
+
+int	ft_pipe_prog(t_adm *adm, t_pip *job)
+{
+	int	j;
+
+	if (open_pipes(adm) == -1)
+		return (1);
+	redir_pipe_ends(adm);
+	j = -1;
+	while (job != NULL && ++j < adm->p)
+	{
+		ft_exec_job(adm, job, j);
+		job = job->next;
+	}
+	close_all_fd(adm);
 	return (0);
 }
 
 int	ft_execute_prog(t_adm *adm)
 {
 	t_pip	*job;
-	int		j;
+	char	*tmp[2];
 
-printf("ft_execute_prog\n");
 	job = adm->piph;
 	if (ft_listev_to_tabev(adm))
 		return (ft_perror("list_to_tabev", -1));
-// ATTENTION ici il faut mute les signaux (pour eviter des pb)
-	if (adm->p == 1 && job->t == 'c')
+	if (g_sig == 0)
+		g_sig = 1;
+	if (adm->p == 1 && job->t != 'b')
 		ft_exec_job(adm, job, 0);
 	else if (adm->p == 1 && job->t == 'b')
-	{
 		if (exec_builtin(adm, job, 0) == -1)
-			ft_perror("exec_builtin", -1);
-	}
-	else
-	{
-		if (open_pipes(adm) == -1)
+			ft_perror(job->exec[0], -1);
+	if (adm->p > 1)
+		if (ft_pipe_prog(adm, job))
 			return (1);
-		redir_pipe_ends(adm);
-		j = -1;
-		while (++j < adm->p)
-		{
-			ft_exec_job(adm, job, j);
-			if (job->next)
-				job = job->next;
-		}
-	}
 	close_all_fd(adm);
-	wait_all_pid(adm);
+	tmp[0] = ft_itoa(wait_all_pid(adm));
+	tmp[1] = ft_strjoin_lib("?=", tmp[0]);
+	ft_export(tmp[1], adm);
 	if (adm->ev)
 		adm->ev = ft_free_split(adm->ev);
-	ft_signal(); // ATTENTION ici remettre les signaux de base
-	return (0);
+	g_sig = 0;
+	return (free(tmp[0]), free(tmp[1]), 0);
 }
