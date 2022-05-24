@@ -113,7 +113,7 @@ int	ft_export(char *s, t_adm *adm)
 	while (vars && vars[++i])
 	{
 		if (vars[i][0] >= '0' && vars[i][0] <= '9')
-			return (ft_free_split(vars), -1);
+			return (ft_free_split(vars), write(1, &EKONVEU, 34), 0);
 		ft_export_exist(adm, vars[i]);
 		ft_export_bis(adm, vars[i]);
 	}

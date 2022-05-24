@@ -63,7 +63,7 @@ int	wait_all_pid(t_adm *adm)
 		job = job->next;
 	}
 	waitpid(adm->pid[j], &status, WEXITSTATUS(status));
-	return (status);
+	return (status / 256);
 }
 
 int	exec_builtin_cmp(t_adm *adm, t_pip *pip)

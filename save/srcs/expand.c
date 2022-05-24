@@ -26,42 +26,48 @@ t_env	*ft_check_exp(t_adm *adm, char *buf)
 	return (NULL);
 }
 
-char	*ft_take_exp(t_adm *adm, char *str, int *d)
+char	*ft_take_exp(t_adm *adm, char *str, int *y, int *i)
 {
 	char	buf[BUF_S];
 	char	*ret;
-	int		i;
+	int		x;
 
-	i = 0;
+	x = 0;
 	ft_bzero(buf, BUF_S);
-	while (str[i] && str[i] != '=')
+	while (str[x] && ((str[x] >= 65 && str[x] <= 90)
+			|| (str[x] >= 97 && str[x] <= 122)
+			|| (str[x] >= 48 && str[x] <= 57) || str[x] == 95 || str[x] == 63))
 	{
-		buf[i] = str[i];
-		i++;
+		buf[x] = str[x];
+		x++;
 	}
-	*d += i;
+	*y += x;
 	if (!ft_check_exp(adm, buf))
 	{
+		*i -= 1;
 		ret = malloc(sizeof(char) * 1);
 		ret[0] = '\0';
 		return (ret);
 	}
 	ret = ft_strdup(ft_check_exp(adm, buf)->val);
+	*i += ft_strlen(ret) - 1;
 	return (ret);
 }
 
 int	ft_cut_exp(char **new, t_adm *adm, t_elm *elm, int *i)
 {
 	char	*tmp;
+	int		y[1];
 
+	y[0] = i[0];
 	tmp = elm->str;
-	new[0] = ft_strndup(elm->str, *i);
+	new[0] = ft_strndup(elm->str, *y);
 	if (new[0] == NULL)
 		return (1);
-	new[1] = ft_take_exp(adm, &elm->str[++*i], i);
+	new[1] = ft_take_exp(adm, &elm->str[*y + 1], y, i);
 	if (new[1] == NULL)
 		return (1);
-	new[2] = ft_strdup(&elm->str[*i]);
+	new[2] = ft_strdup(&elm->str[++*y]);
 	if (new[2] == NULL)
 		return (1);
 	elm->str = ft_strjoin(3, new, "");

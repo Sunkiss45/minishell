@@ -54,13 +54,16 @@ int	ft_count_op(t_elm *now)
 
 t_elm	*ft_go_to_cb(t_elm *now)
 {
+	t_elm	*sv;
+
+	sv = now;
 	while (now != NULL && now->t != '|')
 	{
 		if (now->t == 'c' || now->t == 'b')
-			break ;
+			return (now);
 		now = now->next;
 	}
-	return (now);
+	return (sv);
 }
 
 char	**ft_create_exec(t_elm *now, int i)
