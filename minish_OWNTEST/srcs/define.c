@@ -15,20 +15,15 @@
 int	is_command_here(t_elm *elm)
 {
 	int		fd;
-	char	*tmp[2];
 
-	tmp[0] = getcwd(NULL, 256);
-	tmp[1] = ft_strjoin_lib(tmp[0], "/");
-	elm->exe = ft_strjoin_lib(tmp[1], elm->str);
-	free(tmp[0]);
-	free(tmp[1]);
+	elm->exe = ft_strjoin_lib(NULL, elm->str);
 	if (elm->exe == NULL)
 		return (ft_perror("is_command", -1));
 	fd = open(elm->exe, O_DIRECTORY);
-	if (!access(elm->exe, F_OK) && !access(elm->exe, X_OK) && fd == -1
-		&& !ft_strcmp(elm->str, "./minishell"))
+	if (!access(elm->exe, F_OK) && !access(elm->exe, X_OK) && fd == -1)
 	{
-		g_sig = 2;
+		if (!ft_strcmp(elm->str, "./minishell"))
+			g_sig = 2;
 		return (1);
 	}
 	if (fd > 0)
@@ -57,6 +52,16 @@ int	is_command(t_adm *adm, t_elm *elm)
 		free(elm->exe);
 		elm->exe = NULL;
 	}
+	// elm->exe = ft_strjoin_lib(NULL, elm->str);
+	// if (elm->exe == NULL)
+	// 	return (ft_perror("is_command", -1));
+	// fd = open(elm->exe, O_DIRECTORY);
+	// if (!access(elm->exe, F_OK) && !access(elm->exe, X_OK) && fd == -1)
+	// 	return (1);
+	// if (fd > 0)
+	// 	close(fd);
+	// free(elm->exe);
+	// elm->exe = NULL;
 	i = is_command_here(elm);
 	if (i == -1)
 		return (ft_perror("is_command_here", -1));
