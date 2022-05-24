@@ -64,7 +64,6 @@ int	ft_job(char *arg, t_adm *adm)
 	adm->i = 0;
 	while (elm != NULL && adm->i != adm->p)
 	{
-//printf(GREEN"elm->str = [%s] | elm->t = [%c]"RESET"\n", elm->str, elm->t);
 		if (!x)
 		{
 			if (ft_parse_job(adm, elm))

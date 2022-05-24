@@ -67,6 +67,7 @@ char	*ft_strchr(char c, char *set);
 char	*ft_strdup(char *src);
 char	*ft_strndup(char *src, int n);
 char	*ft_strdup_cut(char *str, char c);
+char	*ft_strstr(char *str, char *to_find);
 
 /*
  * === get_next_line === *

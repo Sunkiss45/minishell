@@ -80,9 +80,29 @@ void	ft_export_exist(t_adm *adm, char *s)
 	}
 }
 
-int	ft_export(char *s, t_adm *adm)
+void	ft_export_bis(t_adm *adm, char *var)
 {
 	t_env	*ev;
+
+	ev = adm->envh;
+	while (ev != NULL)
+	{
+		if (ft_strchr('=', var))
+		{
+			if (var[0] == '=')
+			{
+				write(1, &EKONVEU, 34);
+				return ;
+			}
+			ft_create_ev(adm, var);
+			break ;
+		}
+		ev = ev->next;
+	}
+}
+
+int	ft_export(char *s, t_adm *adm)
+{
 	int		i;
 	char	**vars;
 
@@ -95,16 +115,7 @@ int	ft_export(char *s, t_adm *adm)
 		if (vars[i][0] >= '0' && vars[i][0] <= '9')
 			return (ft_free_split(vars), -1);
 		ft_export_exist(adm, vars[i]);
-		ev = adm->envh;
-		while (ev != NULL)
-		{
-			if (ft_strchr('=', vars[i]))
-			{
-				ft_create_ev(adm, vars[i]);
-				break ;
-			}
-			ev = ev->next;
-		}
+		ft_export_bis(adm, vars[i]);
 	}
 	return (ft_free_split(vars), 0);
 }

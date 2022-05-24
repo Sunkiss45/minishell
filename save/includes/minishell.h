@@ -46,6 +46,7 @@
 # define RESET "\033[0m"
 
 # define BUILTINS "echo cd pwd export unset env exit"
+# define EKONVEU "minishell: not a valid identifier\n"
 # define BUF_S 1024
 
 extern int	g_sig;
@@ -157,7 +158,7 @@ char	*ft_save_param(t_elm *now);
 
 void	print_pip(t_pip *pip); /// A SUPPR
 int		ft_redir_in(t_adm *adm, t_pip *pip);
-int 	ft_redir_out(t_adm *adm, t_pip *pip);
+int		ft_redir_out(t_adm *adm, t_pip *pip);
 
 /*
  *	srcs/prog.c

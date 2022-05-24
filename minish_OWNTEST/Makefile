@@ -21,7 +21,7 @@ RM			=	/usr/bin/rm -rf
 
 LIB			=	-L./Libft -lft -L./local/lib -lreadline
 
-vpath %.c srcs #va chercher les fichiers .c dans ts les dossiers repertories
+vpath %.c srcs
 
 SRC			=	srcs/main.c \
 				srcs/env.c \
@@ -43,9 +43,9 @@ SRC			=	srcs/main.c \
 
 OBJ			=	$(SRC:srcs/%.c=objects/%.o)
 
-all			:	$(NAME)
+all			:	libft obj $(NAME)
 
-$(NAME)		:	libft obj $(OBJ)
+$(NAME)		:	$(OBJ)
 				$(CC) $(CFLAGS) -o $(NAME) $(SRC) $(LIB)
 
 libft		:

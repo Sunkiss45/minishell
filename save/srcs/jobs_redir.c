@@ -64,12 +64,10 @@ int	ft_redir_out(t_adm *adm, t_pip *pip)
 		if ((now->t == '>' || now->t == 'a')
 			&& now->next && adm->i == adm->p - 1)
 		{
-//printf(RED"now->next->str = [%s]"RESET"\n", now->next->str);
 			if (now->t == '>')
 				pip->fd_out = ft_open_fd(now->next->str);
 			if (now->t == 'a')
 				pip->fd_out = ft_append_fd(now->next->str);
-//printf(GREEN"fd_out = [%d]"RESET"\n", pip->fd_out);
 		}
 		now = now->next;
 	}

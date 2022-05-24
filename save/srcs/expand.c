@@ -58,17 +58,13 @@ int	ft_cut_exp(char **new, t_adm *adm, t_elm *elm, int *i)
 	new[0] = ft_strndup(elm->str, *i);
 	if (new[0] == NULL)
 		return (1);
-//printf(RED"new[0] = [%s]"RESET"\n", new[0]);
 	new[1] = ft_take_exp(adm, &elm->str[++*i], i);
 	if (new[1] == NULL)
 		return (1);
-//printf(RED"new[1] = [%s]"RESET"\n", new[1]);
 	new[2] = ft_strdup(&elm->str[*i]);
 	if (new[2] == NULL)
 		return (1);
-//printf(RED"new[2] = [%s]"RESET"\n", new[2]);
 	elm->str = ft_strjoin(3, new, "");
-//printf(YELLOW"elm->str = [%s]"RESET"\n", elm->str);
 	expand_free(new, 0);
 	free(tmp);
 	return (0);

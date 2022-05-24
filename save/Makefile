@@ -43,9 +43,9 @@ SRC			=	srcs/main.c \
 
 OBJ			=	$(SRC:srcs/%.c=objects/%.o)
 
-all			:	$(NAME)
+all			:	libft obj $(NAME)
 
-$(NAME)		:	libft obj $(OBJ)
+$(NAME)		:	$(OBJ)
 				$(CC) $(CFLAGS) -o $(NAME) $(SRC) $(LIB)
 
 libft		:

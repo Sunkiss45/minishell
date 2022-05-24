@@ -54,7 +54,7 @@ int	ft_count_op(t_elm *now)
 
 t_elm	*ft_go_to_cb(t_elm *now)
 {
-	while (now != NULL)
+	while (now != NULL && now->t != '|')
 	{
 		if (now->t == 'c' || now->t == 'b')
 			break ;

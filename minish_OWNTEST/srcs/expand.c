@@ -26,7 +26,7 @@ t_env	*ft_check_exp(t_adm *adm, char *buf)
 	return (NULL);
 }
 
-char	*ft_take_exp(t_adm *adm, char *str, int *d)
+char	*ft_take_exp(t_adm *adm, char *str, int *y)
 {
 	char	buf[BUF_S];
 	char	*ret;
@@ -34,12 +34,15 @@ char	*ft_take_exp(t_adm *adm, char *str, int *d)
 
 	i = 0;
 	ft_bzero(buf, BUF_S);
-	while (str[i] && str[i] != '=')
+	//printf(CYAN"str[i] = [%c]"RESET"\n", str[i]);
+	while (str[i] && ((str[i] >= 65 && str[i] <= 90) 
+		|| (str[i] >= 97 && str[i] <= 122)
+		|| (str[i] >= 48 && str[i] <= 57) || str[i] == 95 || str[i] == 63))
 	{
 		buf[i] = str[i];
 		i++;
 	}
-	*d += i;
+	printf(RED"buf = [%s]"RESET"\n", buf);
 	if (!ft_check_exp(adm, buf))
 	{
 		ret = malloc(sizeof(char) * 1);
@@ -47,24 +50,33 @@ char	*ft_take_exp(t_adm *adm, char *str, int *d)
 		return (ret);
 	}
 	ret = ft_strdup(ft_check_exp(adm, buf)->val);
+	*y += i;
 	return (ret);
 }
 
 int	ft_cut_exp(char **new, t_adm *adm, t_elm *elm, int *i)
 {
 	char	*tmp;
+	int		y[1];
 
 	tmp = elm->str;
 	new[0] = ft_strndup(elm->str, *i);
 	if (new[0] == NULL)
 		return (1);
-	new[1] = ft_take_exp(adm, &elm->str[++*i], i);
+printf(RED"new[0] = [%s]"RESET"\n", new[0]);
+	y[0] = i[0];
+	new[1] = ft_take_exp(adm, &elm->str[*y + 1], y);
 	if (new[1] == NULL)
 		return (1);
-	new[2] = ft_strdup(&elm->str[*i]);
+printf(RED"new[1] = [%s]"RESET"\n", new[1]);
+	new[2] = ft_strdup(&elm->str[*y]);
 	if (new[2] == NULL)
 		return (1);
+printf(RED"new[2] = [%s]"RESET"\n"BLUE"y = [%d] i = [%d]"RESET"\n", new[2], *y, *i);
+	if (new[1][0] != '\0')
+		*i = *y;
 	elm->str = ft_strjoin(3, new, "");
+printf(RED"elm->str = [%s]"RESET"\n", elm->str);
 	expand_free(new, 0);
 	free(tmp);
 	return (0);
@@ -81,9 +93,11 @@ int	ft_parse_exp(t_adm *adm, t_elm *elm)
 	new[2] = NULL;
 	while (++i < ft_strlen(elm->str) && elm->str[i])
 	{
+printf(GREEN"elm->str[%d] = [%c]"RESET"\n", i, elm->str[i]);
 		if (elm->str[i] == '$')
 			if (ft_cut_exp(new, adm, elm, &i))
 				return (expand_free(new, 1));
+printf(YELLOW"elm->str[%d] = [%c]"RESET"\n", i, elm->str[i]);
 		new[0] = NULL;
 		new[1] = NULL;
 		new[2] = NULL;

@@ -75,6 +75,9 @@ int	ft_get_path(t_adm *adm)
 	t_env	*ev;
 
 	ev = adm->envh;
+	if (adm->pth)
+		ft_free_split(adm->pth);
+	adm->pth = NULL;
 	while (ev != NULL)
 	{
 		if (!ft_strncmp(ev->var, "PATH", 4))

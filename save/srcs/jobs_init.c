@@ -52,7 +52,6 @@ int	ft_parse_job(t_adm *adm, t_elm *elm)
 		return (ft_perror("ft_redir_in", 1));
 	if (ft_redir_out(adm, pip) == -1)
 		return (ft_perror("ft_redir_out", 0));
-	//print_pip(pip); /// A SUPR ///
 	adm->i++;
 	return (0);
 }

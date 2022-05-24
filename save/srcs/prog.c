@@ -45,13 +45,14 @@ void	ft_exec_job(t_adm *adm, t_pip *job, int j)
 		return ;
 	else if (adm->pid[j] == 0)
 	{
-//printf(GREEN"job->fd_in = [%d] [%s]"RESET"\n", job->fd_in, job->exec[0]);
-//printf(GREEN"job->fd_out = [%d] [%s]"RESET"\n", job->fd_out, job->exec[0]);
 		if (job->t == '\0')
 		{
-			write(1, "minishell: ", 11);
-			write(1, job->exec[0], ft_strlen(job->exec[0]));
-			write(1, ": command not found\n", 20);
+			if (job->exec[0])
+			{
+				write(1, "minishell: ", 11);
+				write(1, job->exec[0], ft_strlen(job->exec[0]));
+				write(1, ": command not found\n", 20);
+			}
 			exec_builtin(adm, job, 1);
 		}
 		dup2(job->fd_in, STDIN_FILENO);

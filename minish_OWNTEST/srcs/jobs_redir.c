@@ -107,8 +107,10 @@ int	ft_redir_in(t_adm *adm, t_pip *pip)
 		return (0);
 	while (now != NULL && !ft_strchr(now->t, ">a|"))
 	{
-		if (now->t == 'f')
+		if (now->t == 'f' && now->prev && now->prev->t == '<')
 		{
+			if (pip->fd_in > 2)
+				close(pip->fd_in);
 			pip->fd_in = open(now->str, O_RDONLY);
 			if (pip->fd_in == -1)
 				return (-1);
